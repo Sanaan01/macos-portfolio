@@ -49,7 +49,7 @@ const dockApps = [
         canOpen: true,
     },
     {
-        id: "photos",
+        id: "gallery",
         name: "Gallery", // was "Photos"
         icon: "photos.png",
         canOpen: true,
@@ -129,7 +129,7 @@ const socials = [
         text: "Github",
         icon: "/icons/github.svg",
         bg: "#f4656b",
-        link: "https://github.com/JavaScript-Mastery-Pro",
+        link: "https://github.com/Sanaan01",
     },
     {
         id: 2,
@@ -140,21 +140,21 @@ const socials = [
     },
     {
         id: 3,
-        text: "Twitter/X",
-        icon: "/icons/twitter.svg",
+        text: "Instagram",
+        icon: "/icons/instagram.svg",
         bg: "#ff866b",
-        link: "https://x.com/jsmasterypro",
+        link: "https://www.instagram.com/__sanaan__/",
     },
     {
         id: 4,
-        text: "LinkedIn",
-        icon: "/icons/linkedin.svg",
+        text: "Youtube",
+        icon: "/icons/youtube.svg",
         bg: "#05b6f6",
-        link: "https://www.linkedin.com/company/javascriptmastery/posts/?feedView=all",
+        link: "https://www.youtube.com/@sanaan0168",
     },
 ];
 
-const photosLinks = [
+const galleryLinks = [
     {
         id: 1,
         icon: "/icons/gicon1.svg",
@@ -186,18 +186,22 @@ const gallery = [
     {
         id: 1,
         img: "/images/gal1.png",
+        categories: ["Library", "Favorites", "People"],
     },
     {
         id: 2,
         img: "/images/gal2.png",
+        categories: ["Library", "Memories"],
     },
     {
         id: 3,
         img: "/images/gal3.png",
+        categories: ["Library", "Places"],
     },
     {
         id: 4,
         img: "/images/gal4.png",
+        categories: ["Library", "Favorites"],
     },
 ];
 
@@ -208,7 +212,7 @@ export {
     blogPosts,
     techStack,
     socials,
-    photosLinks,
+    galleryLinks,
     gallery,
 };
 
@@ -222,7 +226,7 @@ const WORK_LOCATION = {
         // ▶ Project 1
         {
             id: 5,
-            name: "Nike Ecommerce Website Application",
+            name: "BrainRot ScreenTime Tracker",
             icon: "/images/folder.png",
             kind: "folder",
             position: "top-10 left-5", // icon position inside Finder
@@ -230,21 +234,21 @@ const WORK_LOCATION = {
             children: [
                 {
                     id: 1,
-                    name: "Nike Project.txt",
+                    name: "BrainRot Windows.txt",
                     icon: "/images/txt.png",
                     kind: "file",
                     fileType: "txt",
                     position: "top-5 left-10",
                     description: [
-                        "The Nike eCommerce website is a sleek and modern platform designed for shopping the latest Nike collections.",
-                        "Instead of a simple online store, it delivers an immersive experience with bold visuals, interactive product displays, and smooth navigation.",
-                        "Think of it like walking into a flagship Nike store—but right from your phone or laptop.",
-                        "It's built with Next.js and Tailwind, ensuring fast performance, responsive design, and a clean, premium look.",
+                        "The Brainrot UI Screentime app is a native Win UI 3 app.",
+                        "Instead of a simple screentime app it uses animations to show different 'rotting' states of the brain",
+                        "With a cartoony approach it shows the state of the user's brain. Encouraging them to do something healthier with their time",
+                        "Work in Progress",
                     ],
                 },
                 {
                     id: 2,
-                    name: "nike.com",
+                    name: "sanaan.dev/brainrotui",
                     icon: "/images/safari.png",
                     kind: "file",
                     fileType: "url",
@@ -253,7 +257,7 @@ const WORK_LOCATION = {
                 },
                 {
                     id: 4,
-                    name: "nike.png",
+                    name: "brainrot.png",
                     icon: "/images/image.png",
                     kind: "file",
                     fileType: "img",
@@ -275,7 +279,7 @@ const WORK_LOCATION = {
         // ▶ Project 2
         {
             id: 6,
-            name: "AI Resume Analyzer",
+            name: "Video Editing",
             icon: "/images/folder.png",
             kind: "folder",
             position: "top-52 right-80",
@@ -283,30 +287,29 @@ const WORK_LOCATION = {
             children: [
                 {
                     id: 1,
-                    name: "AI Resume Analyzer Project.txt",
+                    name: "What I can Do.txt",
                     icon: "/images/txt.png",
                     kind: "file",
                     fileType: "txt",
                     position: "top-5 right-10",
                     description: [
-                        "AI Resume Analyzer is a smart tool that helps you perfect your resume with instant feedback.",
-                        "Instead of guessing what recruiters want, you get AI-powered insights on keywords, formatting, and overall impact.",
-                        "Think of it like having a career coach—pointing out strengths, fixing weaknesses, and boosting your chances of landing interviews.",
-                        "It's built with Next.js and Tailwind, so it runs fast, looks professional, and works seamlessly on any device.",
+                        "From advanced 3D to basic 2D editing I can do it all.",
+                        "I've edited made animations for institutions and individuals.",
+                        "Using different applications such as After Effects, Premiere Pro, Blender, and more.",
                     ],
                 },
                 {
                     id: 2,
-                    name: "ai-resume-analyzer.com",
+                    name: "instagram.com/sanaan_visuals",
                     icon: "/images/safari.png",
                     kind: "file",
                     fileType: "url",
-                    href: "https://youtu.be/iYOz165wGkQ?si=R1hs8Legl200m0Cl",
+                    href: "https://www.instagram.com/sanaan_visuals",
                     position: "top-20 left-20",
                 },
                 {
                     id: 4,
-                    name: "ai-resume-analyzer.png",
+                    name: "insta.png",
                     icon: "/images/image.png",
                     kind: "file",
                     fileType: "img",
@@ -328,54 +331,12 @@ const WORK_LOCATION = {
         // ▶ Project 3
         {
             id: 7,
-            name: "Food Delivery App",
+            name: "Coming soon",
             icon: "/images/folder.png",
             kind: "folder",
             position: "top-10 left-80",
             windowPosition: "top-[33vh] left-7",
-            children: [
-                {
-                    id: 1,
-                    name: "Food Delivery App Project.txt",
-                    icon: "/images/txt.png",
-                    kind: "file",
-                    fileType: "txt",
-                    position: "top-5 left-10",
-                    description: [
-                        "Our Food Delivery App is a fast and convenient way to order meals from your favorite restaurants.",
-                        "Instead of making calls or waiting in line, you can browse menus, customize orders, and track deliveries in real time.",
-                        "Think of it like having your favorite restaurants in your pocket—ready to deliver anytime, anywhere.",
-                        "It’s built with React Native, so it works smoothly on both iOS and Android with a clean, modern design.",
-                    ],
-                },
-                {
-                    id: 2,
-                    name: "food-delivery-app.com",
-                    icon: "/images/safari.png",
-                    kind: "file",
-                    fileType: "url",
-                    href: "https://youtu.be/LKrX390fJMw?si=cExkuVhf2DTV9G2-",
-                    position: "top-10 right-20",
-                },
-                {
-                    id: 4,
-                    name: "food-delivery-app.png",
-                    icon: "/images/image.png",
-                    kind: "file",
-                    fileType: "img",
-                    position: "top-52 right-80",
-                    imageUrl: "/images/project-3.png",
-                },
-                {
-                    id: 5,
-                    name: "Design.fig",
-                    icon: "/images/plain.png",
-                    kind: "file",
-                    fileType: "fig",
-                    href: "https://google.com",
-                    position: "top-60 right-20",
-                },
-            ],
+            children: [],
         },
     ],
 };
@@ -494,7 +455,7 @@ const WINDOW_CONFIG = {
     contact: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     resume: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     safari: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-    photos: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    gallery: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
