@@ -1,16 +1,76 @@
-# React + Vite
+# macOS Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A macOS-inspired portfolio built with React and Vite. It mimics a desktop experience with draggable windows, a dock, Finder-style project browsing, a gallery, and quick access to contact and resume views.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **macOS-style UI** with desktop windows, dock interactions, and app-like panels.
+- **Project showcase** in a Finder-inspired layout with folders, files, and previews.
+- **Interactive windows** for skills, gallery, contact, resume, and articles.
+- **Smooth animations** powered by GSAP and draggable window behavior.
+- **State management** with Zustand for window/app interactions.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React + Vite
+- GSAP + @gsap/react
+- Tailwind CSS
+- Zustand
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+
+- Node.js 18+ (recommended)
+- npm
+
+### Install
+
+```bash
+npm install
+```
+
+### Run in development
+
+```bash
+npm run dev
+```
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Preview production build
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+```text
+src/
+  components/   # Reusable UI pieces (dock, navbar, welcome screen)
+  windows/      # Windowed views (Finder, Gallery, Terminal, Contact, etc.)
+  constants/    # App configuration/data for dock, links, and content
+  store/        # Zustand state management
+```
+
+## Customization
+
+- Update window content and data in `src/constants/index.js`.
+- Adjust styles in `src/index.css` or component-level styles.
+- Replace images and icons in `public/` for personal branding.
+
+## Scripts
+
+- `npm run dev` — Start the dev server.
+- `npm run build` — Build for production.
+- `npm run preview` — Preview the production build.
+- `npm run lint` — Run ESLint.
+
+## License
+
+MIT
