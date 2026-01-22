@@ -8,7 +8,7 @@ const Contact = () => {
       <WindowControls target="contact"/>
       <h2>Contact me</h2>
     </div>
-    <div className="p-5 space-y-5 bg-white h-[calc(100%-40px)] overflow-y-auto">
+    <div className="p-5 space-y-5">
 
       <img
         src="/images/sanaan.JPG"
