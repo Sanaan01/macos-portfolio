@@ -163,12 +163,12 @@ const galleryLinks = [
     {
         id: 2,
         icon: "/icons/gicon2.svg",
-        title: "Memories",
+        title: "Cappadocia",
     },
     {
         id: 3,
         icon: "/icons/file.svg",
-        title: "Places",
+        title: "Qatar",
     },
     {
         id: 4,
@@ -185,23 +185,33 @@ const galleryLinks = [
 const gallery = [
     {
         id: 1,
-        img: "/images/gal1.png",
-        categories: ["Library", "Favorites", "People"],
+        img: "/images/goreme.JPG",
+        categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 2,
-        img: "/images/gal2.png",
-        categories: ["Library", "Memories"],
+        img: "/images/sapanca.JPG",
+        categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 3,
-        img: "/images/gal3.png",
-        categories: ["Library", "Places"],
+        img: "/images/volcano.JPG",
+        categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 4,
-        img: "/images/gal4.png",
-        categories: ["Library", "Favorites"],
+        img: "/images/cave.JPG",
+        categories: ["Library","Cappadocia"],
+    },
+    {
+        id: 5,
+        img: "/images/sanaanfull.JPG",
+        categories: ["Library","People"],
+    },
+    {
+        id: 6,
+        img: "/images/balloon1.JPG",
+        categories: ["Library","Cappadocia"],
     },
 ];
 

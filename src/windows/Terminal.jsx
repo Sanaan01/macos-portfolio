@@ -8,13 +8,13 @@ const Terminal = () => {
     <>
       <div id="window-header">
         <WindowControls target = "terminal"/>
-        <h2> Tech Stack</h2>
+        <h2> Skill Stack</h2>
       </div>
 
       <div className="techstack">
         <p>
           <span className="font-bold">@sanaan % </span>
-          show tech stack
+          show skills.
         </p>
 
         <div className="label">
@@ -42,7 +42,7 @@ const Terminal = () => {
         </ul>
         <div className="footnote">
           <p>
-            <Check size={20} /> 5 of 5 stacks loaded successfully (100%)
+            <Check size={20} /> 5 of 5 skills loaded successfully (100%)
           </p>
 
           <p className="text-black">
