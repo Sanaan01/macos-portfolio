@@ -34,7 +34,7 @@ const Safari = () => {
           <Copy className="icon"/>
         </div>
       </div>
-      <div className="blog">
+      <div className="blog bg-white h-[calc(100%-40px)] overflow-y-auto">
         <h2>To be announced</h2>
 
         <div className="space-y-8">

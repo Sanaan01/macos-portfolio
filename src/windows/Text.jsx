@@ -17,7 +17,7 @@ const TextFile = () => {
           <h2>{name}</h2>
       </div>
 
-      <div className="p-5 space-y-6 bg-white">
+      <div className="p-5 space-y-6 bg-white h-[calc(100%-40px)] overflow-y-auto">
         <div className="max-w-2xl mx-auto">
           {image ? (
             <div className="w-full">

@@ -23,8 +23,8 @@ const Gallery = () => {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row w-full h-full overflow-y-auto sm:overflow-hidden">
-        <div className="sidebar w-full sm:w-3/12 overflow-y-auto">
+      <div className="flex flex-col sm:flex-row w-full h-[calc(100%-40px)] bg-white overflow-hidden">
+        <div className="sidebar w-full sm:w-3/12 overflow-y-auto h-full">
           <h2>Gallery</h2>
 
           <ul>
@@ -41,15 +41,15 @@ const Gallery = () => {
           </ul>
         </div>
 
-        <div className="gallery">
-          <ul>
-            {filteredGallery.map(({ id, img}) => (
+        <div className="gallery h-full overflow-y-auto flex-1">
+          <ul className="h-fit">
+            {filteredGallery.map(({ id, img, name}) => (
               <li
                 key={id}
                 onClick={() =>
                   openWindow('imgfile', {
                     id,
-                    name: "Gallery Image",
+                    name: name || "Gallery Image",
                     icon: "/images/image.png",
                     kind: "file",
                     filetype: "img",
@@ -57,7 +57,7 @@ const Gallery = () => {
                 })
                 }
               >
-                <img src={img} alt={`Gallery Image ${id}`}/>
+                <img src={img} alt={name || `Gallery Image ${id}`}/>
               </li>
             ))}
           </ul>
