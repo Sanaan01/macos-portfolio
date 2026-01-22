@@ -284,20 +284,20 @@ body {
                         @apply size-full object-cover rounded-lg;
                     }
 
-                    &:first-child {
-                        @apply row-span-2 col-span-2 sm:row-start-1 sm:row-span-3 sm:col-start-1 sm:col-span-3;
+                    &:nth-child(4n + 1) {
+                        @apply col-span-2 row-span-2 sm:col-span-3 sm:row-span-3;
                     }
 
-                    &:nth-child(2) {
-                        @apply row-span-1 col-span-1 sm:row-start-1 sm:row-span-3 sm:col-start-4 sm:col-span-2;
+                    &:nth-child(4n + 2) {
+                        @apply col-span-1 row-span-1 sm:col-span-2 sm:row-span-3;
                     }
 
-                    &:nth-child(3) {
-                        @apply row-span-1 col-span-1 sm:row-start-4 sm:row-span-2 sm:col-start-3 sm:col-span-3;
+                    &:nth-child(4n + 3) {
+                        @apply col-span-1 row-span-1 sm:col-span-2 sm:row-span-2;
                     }
 
-                    &:last-child {
-                        @apply row-span-1 col-span-1 sm:row-start-4 sm:row-span-2 sm:col-start-1 sm:col-span-2;
+                    &:nth-child(4n + 4) {
+                        @apply col-span-2 row-span-1 sm:col-span-3 sm:row-span-2;
                     }
                 }
             }
