@@ -23,7 +23,7 @@ const Navbar = () => {
   }
 
     return (
-        <nav>
+        <nav className="max-sm:hidden">
             <div>
                 <img src="/images/logo.svg" className="p-1 dark:invert rounded cursor-default" alt="logo"/>
                 <p className="font-bold"> Sanaan's Portfolio</p>

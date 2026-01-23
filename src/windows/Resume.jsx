@@ -27,12 +27,13 @@ const Resume = () => {
         </a>
       </div>
 
-      <div className="bg-white dark:bg-[#1e1e1e] h-[calc(100%-40px)] overflow-y-auto">
+      <div className="bg-white dark:bg-[#1e1e1e] h-[calc(100%-40px)] overflow-y-auto max-sm:flex max-sm:justify-center">
         <Document file="/files/resume.pdf">
           <Page
             pageNumber={1}
             renderTextLayer
             renderAnnotationLayer
+            width={window.innerWidth < 640 ? window.innerWidth : undefined}
           />
         </Document>
       </div>

@@ -48,20 +48,33 @@ const Finder = () => {
         <Search className="icon"/>
       </div>
 
-      <div className="bg-white dark:bg-[#1e1e1e] flex h-[calc(100%-40px)]">
-        <div className="sidebar">
-          {renderList("Favourites", Object.values(locations))}
-          {renderList("My Projects", locations.work.children)}
+      <div className="bg-white dark:bg-[#1e1e1e] flex h-[calc(100%-40px)] max-sm:flex-col">
+        <div className="sidebar max-sm:w-full max-sm:h-auto max-sm:flex-none max-sm:border-r-0 max-sm:border-b max-sm:p-2">
+          <div className="max-sm:flex max-sm:overflow-x-auto max-sm:gap-2">
+            {Object.values(locations).map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveLocation(item)}
+                className={clsx(
+                  "flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors whitespace-nowrap",
+                  item.id === activeLocation.id ? "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300" : "text-gray-700 dark:text-gray-300"
+                )}
+              >
+                <img src={item.icon} className="w-4" alt={item.name} />
+                <span className="text-xs font-medium">{item.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
-        <ul className="content">
+        <ul className="content max-sm:p-4 max-sm:grid max-sm:grid-cols-3 max-sm:gap-4 max-sm:h-full max-sm:overflow-y-auto">
           {activeLocation.children.map((item) => (
             <li
               key={item.id}
-              className={item.position}
+              className={clsx(item.position, "max-sm:static max-sm:flex max-sm:flex-col max-sm:items-center max-sm:gap-2")}
               onClick={() => openItem(item)}
             >
-              <img src={item.icon} alt={item.name}/>
-              <p>{item.name}</p>
+              <img src={item.icon} alt={item.name} className="max-sm:size-12" />
+              <p className="max-sm:text-xs max-sm:w-full">{item.name}</p>
             </li>
           ))}
         </ul>

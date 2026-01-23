@@ -71,7 +71,7 @@ const ControlCenter = () => {
       ref={containerRef}
       className="fixed w-[140px] bg-white/70 dark:bg-[#1e1e1e]/70 backdrop-blur-2xl rounded-2xl shadow-2xl overflow-hidden select-none border border-white/20 dark:border-white/10"
       style={{ 
-        zIndex,
+        zIndex: 3100,
         top: data?.bottom ? `${data.bottom + 8}px` : "48px",
         left: data?.centerX ? `${data.centerX - 70}px` : undefined,
         right: data?.centerX ? "auto" : (data?.right ? `${data.right}px` : "16px"),

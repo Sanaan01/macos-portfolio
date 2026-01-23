@@ -1,7 +1,7 @@
 import gsap from "gsap"
 import { Draggable } from "gsap/Draggable"
 
-import {Dock, Home, Navbar, Welcome} from "#components"
+import {Dock, Home, Navbar, MobileNavbar, Welcome} from "#components"
 import {Contact, Finder, Gallery, Image, Resume, Safari, Terminal, Text, ControlCenter} from "#windows"
 
 
@@ -10,6 +10,7 @@ const App = () => {
   return (
     <main>
       <Navbar />
+      <MobileNavbar />
       <Welcome />
       <Dock />
 

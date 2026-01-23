@@ -24,25 +24,25 @@ const Gallery = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row w-full h-[calc(100%-40px)] bg-white dark:bg-[#1e1e1e] overflow-hidden">
-        <div className="sidebar w-full sm:w-3/12 overflow-y-auto h-full">
-          <h2>Gallery</h2>
+        <div className="sidebar w-full sm:w-3/12 overflow-x-auto sm:overflow-y-auto h-auto sm:h-full flex-none">
+          <h2 className="max-sm:hidden">Gallery</h2>
 
-          <ul>
+          <ul className="flex sm:flex-col p-2 gap-2">
             {galleryLinks.map(({ id, icon, title } ) => (
               <li
                 key={id}
                 onClick={() => setActiveCategory(title)}
                 className={activeCategory === title ? "active" : "not-active"}
               >
-                <img src={icon} alt={title}/>
-                <p>{title}</p>
+                <img src={icon} alt={title} className="w-5 h-5"/>
+                <p className="text-sm">{title}</p>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="gallery h-full overflow-y-auto flex-1">
-          <ul className="h-fit">
+        <div className="gallery h-full overflow-y-auto flex-1 max-sm:p-2">
+          <ul className="h-fit grid grid-cols-2 sm:grid-cols-5 gap-2">
             {filteredGallery.map(({ id, img, name}) => {
               const thumbnail = img.replace("/images/", "/images/thumbnails/").replace(/\.[^/.]+$/, ".webp");
               

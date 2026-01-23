@@ -71,17 +71,14 @@ const Welcome = () => {
     <p ref={subtitleRef} aria-label="I'm Sanaan! Welcome to my">
       {renderText(
         "I'm Sanaan! Welcome to my",
-        "text-3xl font-georama",
+        "text-xl sm:text-3xl font-georama",
         100
       )}
     </p>
-    <h1 ref={titleRef} className="mt-7" aria-label="portfolio">
-      {renderText("portfolio", 'text-9xl italic font-georama')}
+    <h1 ref={titleRef} className="mt-4 sm:mt-7" aria-label="portfolio">
+      {renderText("portfolio", 'text-7xl sm:text-9xl italic font-georama')}
     </h1>
 
-    <div className="small-screen">
-      <p>This Portfolio is designed for desktop/tablet screens only.</p>
-    </div>
   </section>
   );
 };

@@ -1,5 +1,5 @@
 import useWindowStore from "#store/window.js";
-import {useLayoutEffect, useRef} from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useGSAP} from "@gsap/react";
 import gsap from "gsap";
 import {Draggable} from "gsap/Draggable";
@@ -90,6 +90,14 @@ const WindowWrapper = (Component, windowKey) => {
       }
     }, [isFullscreen]);
 
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+    useEffect(() => {
+      const handleResize = () => setIsMobile(window.innerWidth < 640);
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     useGSAP(() => {
       const el = ref.current;
       if(!el) return;
@@ -99,14 +107,14 @@ const WindowWrapper = (Component, windowKey) => {
         activeCursor: "grabbing",
       })
 
-      if (isFullscreen) {
+      if (isFullscreen || isMobile) {
         instance.disable();
       } else {
         instance.enable();
       }
 
       return () => instance.kill()
-    }, [isFullscreen])
+    }, [isFullscreen, isMobile])
 
 
 

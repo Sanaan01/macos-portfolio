@@ -20,18 +20,19 @@ const Contact = () => {
       <p>Free to chat anytime.</p>
       <p>contact@sanaan.dev</p>
 
-      <ul>
+      <ul className="max-sm:grid max-sm:grid-cols-2 max-sm:gap-3 max-sm:w-full">
         {socials.map(({ id, bg, link, icon, text }) => (
-          <li key={id} style={{ backgroundColor: bg}}>
+          <li key={id} style={{ backgroundColor: bg}} className="max-sm:w-full">
               <a
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
                 title={text}
+                className="max-sm:flex max-sm:flex-col max-sm:items-center max-sm:gap-2"
               >
 
                 <img src={icon} alt={text} className="size-5"/>
-                <p>{text}</p>
+                <p className="max-sm:text-xs">{text}</p>
               </a>
           </li>
         ))}
