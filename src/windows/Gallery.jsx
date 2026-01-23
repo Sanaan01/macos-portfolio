@@ -42,7 +42,7 @@ const Gallery = () => {
         </div>
 
         <div className="gallery h-full overflow-y-auto flex-1 max-sm:p-2">
-          <ul className="h-fit grid grid-cols-2 sm:grid-cols-5 gap-2">
+          <ul className="h-fit grid grid-cols-2 sm:grid-cols-5 gap-2.5 grid-flow-dense">
             {filteredGallery.map(({ id, img, name}) => {
               const thumbnail = img.replace("/images/", "/images/thumbnails/").replace(/\.[^/.]+$/, ".webp");
               

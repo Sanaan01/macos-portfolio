@@ -1,4 +1,4 @@
-import {useRef} from "react";
+import {useRef, useState} from "react";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
 const FONT_WEIGHTS = {
@@ -57,15 +57,49 @@ const setupTextHover = (container, type) => {
 const Welcome = () => {
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
+  const [animationFinished, setAnimationFinished] = useState(false);
 
   useGSAP(() => {
-    const titleCleanup = setupTextHover(titleRef.current, "title");
-    const subtitleCleanup = setupTextHover(subtitleRef.current, "subtitle");
-    return () => {
-      subtitleCleanup();
-      titleCleanup();
+    const tl = gsap.timeline({
+      defaults: { ease: "power2.inOut", duration: 0.3 },
+      delay: 0.5,
+      onComplete: () => setAnimationFinished(true)
+    });
+
+    if (subtitleRef.current && titleRef.current) {
+      const subtitleSpans = subtitleRef.current.querySelectorAll("span");
+      const titleSpans = titleRef.current.querySelectorAll("span");
+
+      tl.to(subtitleSpans, {
+        fontVariationSettings: `'wght' ${FONT_WEIGHTS.subtitle.max}`,
+        stagger: 0.02,
+      })
+      .to(subtitleSpans, {
+        fontVariationSettings: `'wght' ${FONT_WEIGHTS.subtitle.default}`,
+        stagger: 0.02,
+      }, "<0.3")
+      .to(titleSpans, {
+        fontVariationSettings: `'wght' ${FONT_WEIGHTS.title.max}`,
+        stagger: 0.03,
+      }, "-=0.55")
+      .to(titleSpans, {
+        fontVariationSettings: `'wght' ${FONT_WEIGHTS.title.default}`,
+        stagger: 0.03,
+      }, "<0.3");
     }
   }, []);
+
+  useGSAP(() => {
+    if (!animationFinished) return;
+
+    const subtitleCleanup = setupTextHover(subtitleRef.current, "subtitle");
+    const titleCleanup = setupTextHover(titleRef.current, "title");
+
+    return () => {
+      subtitleCleanup?.();
+      titleCleanup?.();
+    }
+  }, [animationFinished]);
   return (
     <section id="welcome">
     <p ref={subtitleRef} aria-label="Hey! I am Sanaan, Welcome to my">

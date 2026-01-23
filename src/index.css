@@ -331,7 +331,7 @@ body {
             @apply p-5 flex-1 overflow-y-auto;
 
             & > ul {
-                @apply grid grid-cols-2 sm:grid-cols-5 gap-2.5;
+                @apply grid grid-cols-2 sm:grid-cols-5 gap-2.5 grid-flow-dense;
 
                 li {
                     @apply min-h-[100px];
@@ -340,28 +340,36 @@ body {
                         @apply size-full object-cover rounded-lg;
                     }
 
-                    &:nth-child(6n + 1) {
+                    &:nth-child(8n + 1) {
                         @apply col-span-2 row-span-2 sm:col-span-3 sm:row-span-3;
                     }
 
-                    &:nth-child(6n + 2) {
+                    &:nth-child(8n + 2) {
                         @apply col-span-1 row-span-1 sm:col-span-2 sm:row-span-3;
                     }
 
-                    &:nth-child(6n + 3) {
+                    &:nth-child(8n + 3) {
                         @apply col-span-1 row-span-1 sm:col-span-2 sm:row-span-2;
                     }
 
-                    &:nth-child(6n + 4) {
+                    &:nth-child(8n + 4) {
                         @apply col-span-2 row-span-1 sm:col-span-3 sm:row-span-2;
                     }
 
-                    &:nth-child(6n + 5) {
-                        @apply col-span-1 row-span-1 sm:col-span-2 sm:row-span-3;
+                    &:nth-child(8n + 5) {
+                        @apply col-span-2 row-span-2 sm:col-span-2 sm:row-span-3;
                     }
 
-                    &:nth-child(6n + 6) {
-                        @apply col-span-2 row-span-2 sm:col-span-3 sm:row-span-3;
+                    &:nth-child(8n + 6) {
+                        @apply col-span-1 row-span-1 sm:col-span-3 sm:row-span-3;
+                    }
+
+                    &:nth-child(8n + 7) {
+                        @apply col-span-1 row-span-1 sm:col-span-3 sm:row-span-2;
+                    }
+
+                    &:nth-child(8n + 8), &:nth-child(8n) {
+                        @apply col-span-2 row-span-1 sm:col-span-2 sm:row-span-2;
                     }
                 }
             }
