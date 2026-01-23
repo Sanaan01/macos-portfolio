@@ -140,11 +140,11 @@ body {
         }
 
         .minimize {
-            @apply size-3.5 rounded-full bg-[#ffc030] cursor-pointer;
+            @apply size-3.5 rounded-full bg-[#ffc030];
         }
 
         .maximize {
-            @apply size-3.5 rounded-full bg-[#2acb42] cursor-pointer;
+            @apply size-3.5 rounded-full bg-[#2acb42];
         }
     }
 
@@ -243,7 +243,7 @@ body {
     }
 
     #contact {
-        @apply w-full max-w-2xl absolute top-60 left-10 sm:left-2/12 bg-white dark:bg-[#1e1e1e] shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+        @apply max-w-2xl absolute top-60 left-5/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
         h2 {
             @apply font-bold text-sm text-center w-full dark:text-white;
@@ -271,11 +271,7 @@ body {
     }
 
     #gallery {
-        @apply w-full max-w-3xl h-fit sm:h-[500px] absolute top-20 left-10 sm:left-20 bg-white dark:bg-[#1e1e1e] shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden flex flex-col;
-
-        #window-header {
-            @apply flex-none;
-        }
+        @apply max-w-3xl w-[95dvw] sm:w-full h-fit sm:h-[500px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden max-h-[80dvh] sm:max-h-none flex flex-col;
 
         .sidebar {
             @apply flex-none bg-gray-50 dark:bg-[#323232] border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-zinc-700 flex flex-col p-5;
@@ -312,7 +308,7 @@ body {
         .gallery {
             @apply p-5 flex-1 overflow-y-auto;
 
-            & > ul {
+            ul {
                 @apply grid grid-cols-2 sm:grid-cols-5 gap-2.5;
 
                 li {

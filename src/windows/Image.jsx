@@ -17,11 +17,10 @@ const ImageFile = () => {
         <h2>{name}</h2>
       </div>
 
-      <div className="p-5 bg-white dark:bg-[#1e1e1e] h-[calc(100%-40px)] flex items-center justify-center">
+      <div className="p-5 bg-white">
         <img 
           src={imageUrl} 
           alt={name}
-          className="max-w-full max-h-full object-contain"
         />
       </div>
     </>

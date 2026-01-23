@@ -11,7 +11,7 @@ const Terminal = () => {
         <h2> Skill Stack</h2>
       </div>
 
-      <div className="techstack h-[calc(100%-40px)] overflow-y-auto">
+      <div className="techstack">
         <p>
           <span className="font-bold">@sanaan % </span>
           show skills.
