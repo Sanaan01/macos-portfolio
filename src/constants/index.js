@@ -225,6 +225,12 @@ const gallery = [
         img: "/images/balloon2.JPG",
         categories: ["Library","Cappadocia"],
     },
+    {
+        id: 8,
+        name: "balloon3.JPG",
+        img: "/images/balloon3.JPG",
+        categories: ["Library","Cappadocia"],
+    },
 ];
 
 export {

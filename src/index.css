@@ -322,20 +322,28 @@ body {
                         @apply size-full object-cover rounded-lg;
                     }
 
-                    &:nth-child(4n + 1) {
+                    &:nth-child(6n + 1) {
                         @apply col-span-2 row-span-2 sm:col-span-3 sm:row-span-3;
                     }
 
-                    &:nth-child(4n + 2) {
+                    &:nth-child(6n + 2) {
                         @apply col-span-1 row-span-1 sm:col-span-2 sm:row-span-3;
                     }
 
-                    &:nth-child(4n + 3) {
+                    &:nth-child(6n + 3) {
                         @apply col-span-1 row-span-1 sm:col-span-2 sm:row-span-2;
                     }
 
-                    &:nth-child(4n + 4) {
+                    &:nth-child(6n + 4) {
                         @apply col-span-2 row-span-1 sm:col-span-3 sm:row-span-2;
+                    }
+
+                    &:nth-child(6n + 5) {
+                        @apply col-span-1 row-span-1 sm:col-span-2 sm:row-span-3;
+                    }
+
+                    &:nth-child(6n + 6) {
+                        @apply col-span-2 row-span-2 sm:col-span-3 sm:row-span-3;
                     }
                 }
             }
