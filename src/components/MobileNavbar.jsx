@@ -6,7 +6,7 @@ const MobileNavbar = () => {
     const { openWindow, closeWindow, windows } = useWindowStore();
     const [currentTime, setCurrentTime] = useState(dayjs());
     const hasOpenWindow = useMemo(
-        () => Object.values(windows).some((window) => window.isOpen),
+        () => Object.entries(windows).some(([key, window]) => key !== "controlcenter" && window.isOpen),
         [windows],
     );
     const iconClassName = hasOpenWindow
