@@ -25,7 +25,7 @@ const Gallery = () => {
 
       <div className="flex flex-col sm:flex-row w-full h-[calc(100%-40px)] bg-white dark:bg-[#1e1e1e] overflow-hidden">
         <div className="sidebar w-full sm:w-3/12 overflow-x-auto sm:overflow-y-auto h-auto sm:h-full flex-none">
-          <h2 className="max-sm:hidden">Gallery</h2>
+          <h2 className="max-sm:hidden tracking-wider">Gallery</h2>
 
           <ul className="flex sm:flex-col p-2 gap-2">
             {galleryLinks.map(({ id, icon, title } ) => (
