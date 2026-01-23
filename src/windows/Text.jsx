@@ -17,7 +17,7 @@ const TextFile = () => {
           <h2>{name}</h2>
       </div>
 
-      <div className="p-5 space-y-6 bg-white">
+      <div className="p-5 space-y-6 bg-white dark:bg-[#1e1e1e] h-[calc(100%-40px)] overflow-y-auto">
         <div className="max-w-2xl mx-auto">
           {image ? (
             <div className="w-full">
@@ -31,11 +31,11 @@ const TextFile = () => {
 
           
           {subtitle ?
-            <h3 className="text-lg font-semibold">{subtitle}</h3> : null}
+            <h3 className="text-lg font-semibold dark:text-white">{subtitle}</h3> : null}
 
           <div className="space-y-4">
             {description && Array.isArray(description) && description.map((paragraph, index) => (
-              <p key={index} className="text-gray-800 leading-relaxed">
+              <p key={index} className="text-gray-800 dark:text-gray-200 leading-relaxed">
                 {paragraph}
               </p>
             ))}

@@ -77,25 +77,25 @@ const dockApps = [
 const blogPosts = [
     {
         id: 1,
-        date: "Sep 2, 2025",
+        date: "Sep 11, 2025",
         title:
-            "TypeScript Explained: What It Is, Why It Matters, and How to Master It",
-        image: "/images/blog1.png",
-        link: "https://jsmastery.com/blog/typescript-explained-what-it-is-why-it-matters-and-how-to-master-it",
+            "Coming soon.",
+        image: "/images/comingsoon.png",
+        link: "sanaan.dev",
     },
     {
         id: 2,
         date: "Aug 28, 2025",
-        title: "The Ultimate Guide to Mastering Three.js for 3D Development",
-        image: "/images/blog2.png",
-        link: "https://jsmastery.com/blog/the-ultimate-guide-to-mastering-three-js-for-3d-development",
+        title: "Coming soon.",
+        image: "/images/comingsoon.png",
+        link: "sanaan.dev",
     },
     {
         id: 3,
         date: "Aug 15, 2025",
-        title: "The Ultimate Guide to Mastering GSAP Animations",
-        image: "/images/blog3.png",
-        link: "https://jsmastery.com/blog/the-ultimate-guide-to-mastering-gsap-animations",
+        title: "Coming soon.",
+        image: "/images/comingsoon.png",
+        link: "sanaan.dev",
     },
 ];
 
@@ -185,37 +185,50 @@ const galleryLinks = [
 const gallery = [
     {
         id: 1,
+        name: "goreme.JPG",
         img: "/images/goreme.JPG",
         categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 2,
+        name: "sapanca.JPG",
         img: "/images/sapanca.JPG",
         categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 3,
+        name: "volcano.JPG",
         img: "/images/volcano.JPG",
         categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 4,
+        name: "cave.JPG",
         img: "/images/cave.JPG",
         categories: ["Library","Cappadocia"],
     },
     {
         id: 5,
+        name: "sanaanfull.JPG",
         img: "/images/sanaanfull.JPG",
         categories: ["Library","People"],
     },
     {
         id: 6,
+        name: "balloon1.JPG",
         img: "/images/balloon1.JPG",
         categories: ["Library","Cappadocia"],
     },
     {
         id: 7,
+        name: "balloon2.JPG",
         img: "/images/balloon2.JPG",
+        categories: ["Library","Cappadocia"],
+    },
+    {
+        id: 8,
+        name: "balloon3.JPG",
+        img: "/images/balloon3.JPG",
         categories: ["Library","Cappadocia"],
     },
 ];
@@ -474,6 +487,7 @@ const WINDOW_CONFIG = {
     terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    controlcenter: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

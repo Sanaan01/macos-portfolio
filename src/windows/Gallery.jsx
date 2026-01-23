@@ -23,8 +23,8 @@ const Gallery = () => {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row w-full h-full overflow-y-auto sm:overflow-hidden">
-        <div className="sidebar w-full sm:w-3/12 overflow-y-auto">
+      <div className="flex flex-col sm:flex-row w-full h-[calc(100%-40px)] bg-white dark:bg-[#1e1e1e] overflow-hidden">
+        <div className="sidebar w-full sm:w-3/12 overflow-y-auto h-full">
           <h2>Gallery</h2>
 
           <ul>
@@ -41,25 +41,42 @@ const Gallery = () => {
           </ul>
         </div>
 
-        <div className="gallery">
-          <ul>
-            {filteredGallery.map(({ id, img}) => (
-              <li
-                key={id}
-                onClick={() =>
-                  openWindow('imgfile', {
-                    id,
-                    name: "Gallery Image",
-                    icon: "/images/image.png",
-                    kind: "file",
-                    filetype: "img",
-                    imageUrl: img,
-                })
-                }
-              >
-                <img src={img} alt={`Gallery Image ${id}`}/>
-              </li>
-            ))}
+        <div className="gallery h-full overflow-y-auto flex-1">
+          <ul className="h-fit">
+            {filteredGallery.map(({ id, img, name}) => {
+              const thumbnail = img.replace("/images/", "/images/thumbnails/").replace(/\.[^/.]+$/, ".webp");
+              
+              const handlePreload = () => {
+                const imgObj = new Image();
+                imgObj.src = img;
+              };
+
+              return (
+                <li
+                  key={id}
+                  onMouseEnter={handlePreload}
+                  onClick={() =>
+                    openWindow('imgfile', {
+                      id,
+                      name: name || "Gallery Image",
+                      icon: "/images/image.png",
+                      kind: "file",
+                      filetype: "img",
+                      imageUrl: img,
+                      thumbnail,
+                    })
+                  }
+                >
+                  <img
+                    src={thumbnail}
+                    alt={name || `Gallery Image ${id}`}
+                    onError={(e) => {
+                      e.target.src = img;
+                    }}
+                  />
+                </li>
+              )
+            })}
           </ul>
         </div>
 

@@ -11,7 +11,7 @@ const Terminal = () => {
         <h2> Skill Stack</h2>
       </div>
 
-      <div className="techstack">
+      <div className="techstack h-[calc(100%-40px)] overflow-y-auto">
         <p>
           <span className="font-bold">@sanaan % </span>
           show skills.
@@ -45,8 +45,8 @@ const Terminal = () => {
             <Check size={20} /> 5 of 5 skills loaded successfully (100%)
           </p>
 
-          <p className="text-black">
-            <Flag size={15} fill={"black"} />
+          <p className="text-black dark:text-white">
+            <Flag size={15} fill="currentColor" />
             Render time: 6ms
           </p>
 
