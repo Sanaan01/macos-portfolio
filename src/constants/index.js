@@ -204,7 +204,7 @@ const gallery = [
     {
         id: 4,
         name: "cave.JPG",
-        img: "https://pub-a7d87545f8ca4f98974f18caf45980d2.r2.dev/cave.JPG",
+        img: "https://assets.sanaan.dev/cave.JPG",
         categories: ["Library","Cappadocia"],
     },
     {
