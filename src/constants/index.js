@@ -231,6 +231,18 @@ const gallery = [
         img: "/images/balloon3.JPG",
         categories: ["Library","Cappadocia"],
     },
+    {
+        id: 9,
+        name: "goreme_copy.JPG",
+        img: "/images/goreme.JPG",
+        categories: ["Library", "Favorites","Cappadocia"],
+    },
+    {
+        id: 10,
+        name: "sapanca_copy.JPG",
+        img: "/images/sapanca.JPG",
+        categories: ["Library", "Favorites","Cappadocia"],
+    },
 ];
 
 export {
