@@ -185,36 +185,43 @@ const galleryLinks = [
 const gallery = [
     {
         id: 1,
+        name: "goreme.JPG",
         img: "/images/goreme.JPG",
         categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 2,
+        name: "sapanca.JPG",
         img: "/images/sapanca.JPG",
         categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 3,
+        name: "volcano.JPG",
         img: "/images/volcano.JPG",
         categories: ["Library", "Favorites","Cappadocia"],
     },
     {
         id: 4,
+        name: "cave.JPG",
         img: "/images/cave.JPG",
         categories: ["Library","Cappadocia"],
     },
     {
         id: 5,
+        name: "sanaanfull.JPG",
         img: "/images/sanaanfull.JPG",
         categories: ["Library","People"],
     },
     {
         id: 6,
+        name: "balloon1.JPG",
         img: "/images/balloon1.JPG",
         categories: ["Library","Cappadocia"],
     },
     {
         id: 7,
+        name: "balloon2.JPG",
         img: "/images/balloon2.JPG",
         categories: ["Library","Cappadocia"],
     },
