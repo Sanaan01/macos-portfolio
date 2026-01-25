@@ -5,9 +5,10 @@ import useWindowStore from "#store/window.js";
 const MobileNavbar = () => {
     const { openWindow, closeWindow, windows } = useWindowStore();
     const [currentTime, setCurrentTime] = useState(dayjs());
+    const isNotFound = window.location.pathname !== "/";
     const hasOpenWindow = useMemo(
-        () => Object.entries(windows).some(([key, window]) => key !== "controlcenter" && window.isOpen),
-        [windows],
+        () => isNotFound || Object.entries(windows).some(([key, window]) => key !== "controlcenter" && window.isOpen),
+        [windows, isNotFound],
     );
     const iconClassName = hasOpenWindow
         ? "w-5 h-5 dark:invert"
