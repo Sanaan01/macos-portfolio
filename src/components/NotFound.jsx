@@ -1,7 +1,16 @@
 import { WindowControls } from "#components/index.js";
 
 const NotFound = () => {
-  const path = decodeURIComponent(window.location.pathname || "/");
+  const getSafePath = () => {
+    const rawPath = window.location.pathname || "/";
+    try {
+      return decodeURIComponent(rawPath);
+    } catch (e) {
+      return rawPath;
+    }
+  };
+
+  const path = getSafePath();
 
   return (
     <section id="not-found" className="flex flex-col" role="alert" aria-live="polite">
