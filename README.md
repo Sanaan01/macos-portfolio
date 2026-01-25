@@ -71,6 +71,9 @@ src/
 - `npm run preview` — Preview the production build.
 - `npm run lint` — Run ESLint.
 
+## PWA and iOS
+If the home screen icon doesn’t update on iOS, delete the shortcut and clear Safari website data/cache, then add again.
+
 ## License
 
 MIT
