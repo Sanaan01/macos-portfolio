@@ -26,8 +26,8 @@ const useWindowStore = create(
       if (win) {
         win.isOpen = false
         win.isFullscreen = false
+        state.nextZIndex++
       }
-      state.nextZIndex++
     }),
     toggleFullscreen: (windowKey) => set((state) => {
       const win = state.windows[windowKey];
