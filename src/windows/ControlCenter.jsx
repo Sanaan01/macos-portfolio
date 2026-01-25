@@ -1,4 +1,5 @@
 import useWindowStore from "#store/window.js";
+import useThemeStore from "#store/theme.js";
 import { useEffect, useState, useRef } from "react";
 import clsx from "clsx";
 import gsap from "gsap";
@@ -8,27 +9,9 @@ import { Sun, Moon, Laptop } from "lucide-react";
 const ControlCenter = () => {
   const { windows, closeWindow } = useWindowStore();
   const { isOpen, zIndex, data } = windows.controlcenter;
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "system");
+  const { theme, setTheme } = useThemeStore();
   const containerRef = useRef(null);
   const isFirstMount = useRef(true);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else if (theme === "light") {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      localStorage.removeItem("theme");
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        root.classList.add("dark");
-      } else {
-        root.classList.remove("dark");
-      }
-    }
-  }, [theme]);
 
   useGSAP(() => {
     const el = containerRef.current;

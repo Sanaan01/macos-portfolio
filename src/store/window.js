@@ -14,24 +14,32 @@ const useWindowStore = create(
 
     openWindow: (windowKey, data = null) => set((state) =>{
       const win = state.windows[windowKey];
-      win.isOpen = true
-      win.zIndex = state.nextZIndex
-      win.data = data ?? win.data
-      state.nextZIndex++
+      if (win) {
+        win.isOpen = true
+        win.zIndex = state.nextZIndex
+        win.data = data ?? win.data
+        state.nextZIndex++
+      }
     }),
     closeWindow: (windowKey) => set((state) =>{
       const win = state.windows[windowKey];
-      win.isOpen = false
-      win.isFullscreen = false
-      state.nextZIndex++
+      if (win) {
+        win.isOpen = false
+        win.isFullscreen = false
+        state.nextZIndex++
+      }
     }),
     toggleFullscreen: (windowKey) => set((state) => {
       const win = state.windows[windowKey];
-      win.isFullscreen = !win.isFullscreen;
+      if (win) {
+        win.isFullscreen = !win.isFullscreen;
+      }
     }),
     focusWindow: (windowKey) => set((state) =>{
       const win = state.windows[windowKey];
-      win.zIndex = state.nextZIndex++
+      if (win) {
+        win.zIndex = state.nextZIndex++
+      }
     }),
   }))
 )
