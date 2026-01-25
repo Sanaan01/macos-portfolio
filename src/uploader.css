@@ -1,0 +1,90 @@
+@reference "tailwindcss";
+
+.uploader-root {
+  @apply min-h-dvh w-full flex items-center justify-center p-6 text-white;
+  background: linear-gradient(135deg, #111827 0%, #050505 55%, #000000 100%);
+}
+
+.uploader-window {
+  @apply w-full max-w-5xl rounded-2xl overflow-hidden shadow-2xl bg-white/90 dark:bg-[#1e1e1e];
+}
+
+.uploader-body {
+  @apply grid grid-cols-1 gap-8 bg-white dark:bg-[#1e1e1e] p-6 md:grid-cols-[1.2fr_0.8fr];
+}
+
+.uploader-panel {
+  @apply flex flex-col gap-4;
+}
+
+.uploader-dropzone {
+  @apply flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl p-10 bg-white/60 dark:bg-zinc-900/50 transition-all duration-200 cursor-pointer min-h-[180px];
+}
+
+.uploader-dropzone.is-active {
+  @apply border-blue-400 bg-blue-50/60 dark:bg-blue-500/10;
+}
+
+.uploader-actions {
+  @apply flex flex-col gap-4 pt-2;
+}
+
+.uploader-endpoint {
+  @apply flex flex-col gap-1;
+}
+
+.uploader-endpoint input {
+  @apply rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-gray-700 dark:text-white;
+}
+
+.uploader-buttons {
+  @apply flex items-center gap-3;
+}
+
+.btn {
+  @apply rounded-lg px-4 py-2 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-500;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-zinc-800 dark:text-gray-200 dark:hover:bg-zinc-700;
+}
+
+.uploader-list {
+  @apply flex flex-col gap-4 bg-gray-50 dark:bg-zinc-900/70 rounded-xl p-4 border border-gray-100 dark:border-zinc-800;
+}
+
+.uploader-files {
+  @apply flex flex-col gap-3;
+}
+
+.uploader-file {
+  @apply flex items-center justify-between gap-4 rounded-lg border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2;
+}
+
+.uploader-empty {
+  @apply flex items-center justify-center rounded-lg border border-dashed border-gray-200 dark:border-zinc-800 py-10;
+}
+
+.status {
+  @apply text-xs font-semibold uppercase tracking-wide rounded-full px-2.5 py-1;
+}
+
+.status.queued {
+  @apply bg-gray-200 text-gray-600 dark:bg-zinc-700 dark:text-gray-200;
+}
+
+.status.uploading {
+  @apply bg-yellow-200 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-200;
+}
+
+.status.uploaded {
+  @apply bg-green-200 text-green-700 dark:bg-green-500/20 dark:text-green-200;
+}
+
+.status.failed {
+  @apply bg-red-200 text-red-700 dark:bg-red-500/20 dark:text-red-200;
+}

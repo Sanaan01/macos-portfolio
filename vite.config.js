@@ -7,6 +7,14 @@ import { fileURLToPath } from 'url';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(dirname(fileURLToPath(import.meta.url)), 'index.html'),
+        uploader: resolve(dirname(fileURLToPath(import.meta.url)), 'uploader.html'),
+      },
+    },
+  },
   resolve: {
     alias: {
       '#components': resolve(dirname(fileURLToPath(import.meta.url)), 'src/components'),
