@@ -17,8 +17,8 @@ const Terminal = () => {
           show skills.
         </p>
 
-        <div className="label max-sm:ms-0 max-sm:mt-4">
-          <p className="w-32 max-sm:w-24 max-sm:text-xs">Category</p>
+        <div className="label max-sm:ms-9 max-sm:mt-4">
+          <p className="w-36 max-sm:w-28 max-sm:text-xs">Category</p>
           <p className="max-sm:text-xs">Technologies</p>
 
         </div>
@@ -27,7 +27,7 @@ const Terminal = () => {
           {techStack.map(({ category, items }) => (
             <li key ={category} className="flex items-start max-sm:gap-2">
               <Check className="check flex-none" size={16} />
-              <h3 className="max-sm:ms-0 max-sm:w-24 max-sm:text-xs">{category}</h3>
+              <h3 className="max-sm:ms-0 max-sm:w-28 max-sm:text-xs">{category}</h3>
               <ul className="max-sm:flex-wrap">
                 {items.map((item, i ) => (
                   <li key={i} className="max-sm:text-xs">

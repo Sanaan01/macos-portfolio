@@ -114,7 +114,7 @@ const techStack = [
     },
 
     {
-        category: "Web Development",
+        category: "Web " + "Development",
         items: ["Tailwind CSS", "Node.js", "React.js"],
     },
     {
