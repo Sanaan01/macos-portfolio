@@ -281,7 +281,7 @@ const WORK_LOCATION = {
                     icon: "/images/safari.png",
                     kind: "file",
                     fileType: "url",
-                    href: "sanaan.dev/brainrotui",
+                    href: "https://sanaan.dev/brainrotui",
                     position: "top-10 right-20",
                 },
                 {
