@@ -17,8 +17,8 @@ const Terminal = () => {
           show skills.
         </p>
 
-        <div className="label max-sm:ms-9 max-sm:mt-4">
-          <p className="w-36 max-sm:w-28 max-sm:text-xs">Category</p>
+        <div className="label max-sm:ms-7 max-sm:mt-4">
+          <p className="w-36 max-sm:w-30 max-sm:text-xs">Category</p>
           <p className="max-sm:text-xs">Technologies</p>
 
         </div>
