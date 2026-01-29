@@ -5,4 +5,15 @@ import Dock from "#components/Dock.jsx";
 import WindowControls from "#components/WindowControls.jsx";
 import Home from "#components/Home.jsx";
 import NotFound from "#components/NotFound.jsx";
-export { Navbar, MobileNavbar, Welcome, Dock, WindowControls, Home, NotFound };
+import StartupScreen from "#components/StartupScreen.jsx";
+
+export {
+  Navbar,
+  MobileNavbar,
+  Welcome,
+  Dock,
+  WindowControls,
+  Home,
+  NotFound,
+  StartupScreen,
+};
