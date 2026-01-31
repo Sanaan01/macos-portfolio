@@ -84,7 +84,7 @@ export async function onRequest(context) {
             })
         );
 
-        // Sort by upload date (newest first)
+        // Sort by upload date (newest first) as default
         images.sort((a, b) => {
             const dateA = a.uploadedAt ? new Date(a.uploadedAt) : new Date(0);
             const dateB = b.uploadedAt ? new Date(b.uploadedAt) : new Date(0);
@@ -103,8 +103,41 @@ export async function onRequest(context) {
             console.error('Error fetching categories:', e);
         }
 
+        // Try to get saved gallery order from R2
+        let orderedImages = images;
+        try {
+            const orderObj = await env.MY_BUCKET.get('_meta/gallery-order.json');
+            if (orderObj) {
+                const orderData = await orderObj.json();
+                const savedOrder = orderData.order || [];
+
+                if (savedOrder.length > 0) {
+                    // Create map for quick lookup
+                    const imageMap = new Map(images.map(img => [img.id, img]));
+                    const newOrderedImages = [];
+
+                    // Add images in saved order (only R2 images, not static ones which start with 'static/')
+                    for (const key of savedOrder) {
+                        if (!key.startsWith('static/') && imageMap.has(key)) {
+                            newOrderedImages.push(imageMap.get(key));
+                            imageMap.delete(key);
+                        }
+                    }
+
+                    // Add any remaining images not in saved order (new uploads at the start)
+                    for (const img of imageMap.values()) {
+                        newOrderedImages.unshift(img);
+                    }
+
+                    orderedImages = newOrderedImages;
+                }
+            }
+        } catch (e) {
+            console.error('Error fetching gallery order:', e);
+        }
+
         return new Response(
-            JSON.stringify({ images, categories }),
+            JSON.stringify({ images: orderedImages, categories }),
             {
                 headers: {
                     'Content-Type': 'application/json',
