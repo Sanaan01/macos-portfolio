@@ -32,9 +32,10 @@ export async function onRequest(context) {
     });
 
     try {
-        // List all objects in the bucket
+        // List all objects in the bucket (optionally filtered by prefix)
         const listCommand = new ListObjectsV2Command({
             Bucket: env.R2_BUCKET_NAME,
+            Prefix: env.R2_PATH_PREFIX || '', // Filter by folder if specified
         });
 
         const listResponse = await client.send(listCommand);
