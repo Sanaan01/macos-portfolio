@@ -56,7 +56,7 @@ export async function onRequest(context) {
                     // Construct URLs
                     const fullUrl = `${env.R2_PUBLIC_URL}/${obj.key}`;
                     // Cloudflare Image Resizing URL for thumbnails (800px long side, maintain aspect ratio)
-                    const thumbnailUrl = `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85/${fullUrl}`;
+                    const thumbnailUrl = `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85,format=auto/${fullUrl}`;
 
                     // Extract filename from key
                     const name = obj.key.split('/').pop();
@@ -77,7 +77,7 @@ export async function onRequest(context) {
                         id: obj.key,
                         name: obj.key.split('/').pop(),
                         img: fullUrl,
-                        thumbnail: `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85/${fullUrl}`,
+                        thumbnail: `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85,format=auto/${fullUrl}`,
                         categories: ['Library'],
                     };
                 }
