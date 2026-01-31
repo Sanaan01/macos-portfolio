@@ -163,20 +163,15 @@ const galleryLinks = [
     {
         id: 2,
         icon: "/icons/gicon2.svg",
-        title: "Cappadocia",
+        title: "Turkey",
     },
     {
         id: 3,
-        icon: "/icons/file.svg",
-        title: "Qatar",
-    },
-    {
-        id: 4,
         icon: "/icons/gicon4.svg",
         title: "People",
     },
     {
-        id: 5,
+        id: 4,
         icon: "/icons/gicon5.svg",
         title: "Favorites",
     },
@@ -187,26 +182,26 @@ const gallery = [
         id: 1,
         name: "goreme.JPG",
         img: "/images/goreme.JPG",
-        categories: ["Library", "Favorites", "Cappadocia"],
+        categories: ["Library", "Favorites", "Turkey"],
     },
     {
         id: 2,
         name: "sapanca.JPG",
         img: "/images/sapanca.JPG",
-        categories: ["Library", "Favorites", "Cappadocia"],
+        categories: ["Library", "Favorites", "Turkey"],
     },
     {
         id: 3,
         name: "volcano.JPG",
         img: "/images/volcano.JPG",
-        categories: ["Library", "Favorites", "Cappadocia"],
+        categories: ["Library", "Favorites", "Turkey"],
     },
     {
         id: 4,
         name: "cave.JPG",
         img: "https://assets.sanaan.dev/constants/cave.JPG",
         thumbnail: "/images/thumbnails/cave.webp",
-        categories: ["Library", "Cappadocia"],
+        categories: ["Library", "Turkey"],
     },
     {
         id: 5,
@@ -218,19 +213,19 @@ const gallery = [
         id: 6,
         name: "balloon1.JPG",
         img: "/images/balloon1.JPG",
-        categories: ["Library", "Cappadocia"],
+        categories: ["Library", "Turkey"],
     },
     {
         id: 7,
         name: "balloon2.JPG",
         img: "/images/balloon2.JPG",
-        categories: ["Library", "Cappadocia"],
+        categories: ["Library", "Turkey"],
     },
     {
         id: 8,
         name: "balloon3.JPG",
         img: "/images/balloon3.JPG",
-        categories: ["Library", "Cappadocia"],
+        categories: ["Library", "Turkey"],
     },
 ];
 
