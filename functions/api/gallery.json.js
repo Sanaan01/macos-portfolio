@@ -136,8 +136,20 @@ export async function onRequest(context) {
             console.error('Error fetching gallery order:', e);
         }
 
+        // Get the saved order array to return to client (for static image ordering)
+        let savedOrder = null;
+        try {
+            const orderObj = await env.MY_BUCKET.get('_meta/gallery-order.json');
+            if (orderObj) {
+                const orderData = await orderObj.json();
+                savedOrder = orderData.order || null;
+            }
+        } catch (e) {
+            // Order already fetched above, this is just for returning to client
+        }
+
         return new Response(
-            JSON.stringify({ images: orderedImages, categories }),
+            JSON.stringify({ images: orderedImages, categories, order: savedOrder }),
             {
                 headers: {
                     'Content-Type': 'application/json',

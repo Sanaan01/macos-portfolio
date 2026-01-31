@@ -32,9 +32,53 @@ const Gallery = () => {
           throw new Error(data.error);
         }
 
-        // Combine R2 images with static images (R2 first, then static)
         const r2Images = data.images || [];
-        setImages([...r2Images, ...staticGallery]);
+        const savedOrder = data.order || null;
+
+        // Convert static gallery to use keys matching the uploader format
+        const staticWithKeys = staticGallery.map(img => ({
+          ...img,
+          key: `static/${img.name}`,
+        }));
+
+        // If we have a saved order, apply it to combine both sets
+        if (savedOrder && savedOrder.length > 0) {
+          // Create maps for quick lookup
+          const r2Map = new Map(r2Images.map(img => [img.id, img]));
+          const staticMap = new Map(staticWithKeys.map(img => [img.key, img]));
+
+          const orderedImages = [];
+
+          // Add images in saved order
+          for (const key of savedOrder) {
+            if (key.startsWith('static/')) {
+              // Static image
+              if (staticMap.has(key)) {
+                orderedImages.push(staticMap.get(key));
+                staticMap.delete(key);
+              }
+            } else {
+              // R2 image
+              if (r2Map.has(key)) {
+                orderedImages.push(r2Map.get(key));
+                r2Map.delete(key);
+              }
+            }
+          }
+
+          // Add any remaining images not in saved order (new uploads at start, then static)
+          for (const img of r2Map.values()) {
+            orderedImages.unshift(img);
+          }
+          for (const img of staticMap.values()) {
+            orderedImages.push(img);
+          }
+
+          setImages(orderedImages);
+        } else {
+          // No saved order - default: R2 first (already ordered by date), then static
+          setImages([...r2Images, ...staticWithKeys]);
+        }
 
         // Use dynamic categories if available, otherwise fallback to static
         if (data.categories && data.categories.length > 0) {
@@ -49,7 +93,7 @@ const Gallery = () => {
       } catch (err) {
         console.error('Gallery fetch error:', err);
         setError(err.message);
-        // Fallback to static images on error
+        // Fallback to static images on error (default order from constants)
         setImages(staticGallery);
       } finally {
         setLoading(false);
