@@ -96,8 +96,8 @@ export async function onRequest(context) {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    // Cache: 5 min browser, 1 hour CDN
-                    'Cache-Control': 'public, max-age=300, s-maxage=3600',
+                    // No browser cache, CDN caches for 5 min but revalidates
+                    'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=60',
                 },
             }
         );
