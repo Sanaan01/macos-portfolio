@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 
 const ClockWidget = ({ scale }) => {
     // --- ADJUST THIS VARIABLE TO SCALE THE DESKTOP CLOCK ---
-    const DEFAULT_SCALE = 0.9;
+    const DEFAULT_SCALE = 1;
 
     // Use the prop if passed (for mobile), otherwise use default
     const CLOCK_SCALE = scale || DEFAULT_SCALE;
@@ -17,12 +17,58 @@ const ClockWidget = ({ scale }) => {
         numberRadius: 50 * CLOCK_SCALE,
         numberSize: 17 * CLOCK_SCALE,
         pinSize: 9 * CLOCK_SCALE,
-        // Hand Dimensions [width, length, offset]
-        hands: {
-            hour: [5.5 * CLOCK_SCALE, 42 * CLOCK_SCALE, -3 * CLOCK_SCALE],
-            minute: [3.8 * CLOCK_SCALE, 71.5 * CLOCK_SCALE, -3 * CLOCK_SCALE],
-            second: [1.2 * CLOCK_SCALE, 85 * CLOCK_SCALE, -15 * CLOCK_SCALE]
-        }
+        innerPinSize: 3 * CLOCK_SCALE,
+        // Hand Dimensions
+        hands: (() => {
+            const TAPER_CONFIG = {
+                width: 5.5 * CLOCK_SCALE,
+                thinWidth: 3 * CLOCK_SCALE,
+                thinStop: 12 * CLOCK_SCALE,
+                transitionLength: 4 * CLOCK_SCALE
+            };
+            return {
+                hour: {
+                    ...TAPER_CONFIG,
+                    length: 42 * CLOCK_SCALE,
+                    offset: -3 * CLOCK_SCALE,
+                },
+                minute: {
+                    ...TAPER_CONFIG,
+                    length: 71.5 * CLOCK_SCALE,
+                    offset: -3 * CLOCK_SCALE,
+                },
+                second: {
+                    width: 1.2 * CLOCK_SCALE,
+                    length: 85 * CLOCK_SCALE,
+                    offset: -12 * CLOCK_SCALE
+                }
+            };
+        })()
+    };
+
+    // Helper to generate tapered clip-path
+    const getTaperedClip = (config) => {
+        const { width: w, length: l, thinWidth: tw, thinStop: ts, transitionLength: tl } = config;
+        if (!tw) return 'none';
+
+        // Horizontal percentages
+        const x1 = ((w - tw) / 2 / w) * 100;
+        const x2 = ((w + tw) / 2 / w) * 100;
+
+        // Vertical percentages (100% is bottom, 0% is top)
+        const yS = (1 - ts / l) * 100;           // Transition starts
+        const yE = (1 - (ts + tl) / l) * 100;     // Transition ends (becomes full width)
+
+        return `polygon(
+            ${x1}% 100%, 
+            ${x2}% 100%, 
+            ${x2}% ${yS}%, 
+            100% ${yE}%, 
+            100% 0%, 
+            0% 0%, 
+            0% ${yE}%, 
+            ${x1}% ${yS}%
+        )`;
     };
 
     const hourRef = useRef(null);
@@ -63,9 +109,9 @@ const ClockWidget = ({ scale }) => {
                 style={{
                     transform: `translateX(-50%) rotate(${i * 6}deg)`,
                     transformOrigin: `center ${d.markingOrigin}px`,
-                    height: (isHour ? 7 : 4) * CLOCK_SCALE + 'px',
-                    width: (isHour ? 1.5 : 0.8) * CLOCK_SCALE + 'px',
-                    backgroundColor: isHour ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.25)',
+                    height: 5 * CLOCK_SCALE + 'px',
+                    width: 1.5 * CLOCK_SCALE + 'px',
+                    backgroundColor: isHour ? 'black' : 'rgba(0,0,0,0.25)',
                 }}
             />
         );
@@ -126,7 +172,12 @@ const ClockWidget = ({ scale }) => {
                         <div ref={hourRef} className="absolute size-0 z-10">
                             <div
                                 className="absolute left-1/2 -translate-x-1/2 bg-black rounded-full"
-                                style={{ bottom: d.hands.hour[2], width: d.hands.hour[0], height: d.hands.hour[1] }}
+                                style={{
+                                    bottom: d.hands.hour.offset,
+                                    width: d.hands.hour.width,
+                                    height: d.hands.hour.length,
+                                    clipPath: getTaperedClip(d.hands.hour)
+                                }}
                             />
                         </div>
 
@@ -134,7 +185,12 @@ const ClockWidget = ({ scale }) => {
                         <div ref={minuteRef} className="absolute size-0 z-20">
                             <div
                                 className="absolute left-1/2 -translate-x-1/2 bg-black rounded-full"
-                                style={{ bottom: d.hands.minute[2], width: d.hands.minute[0], height: d.hands.minute[1] }}
+                                style={{
+                                    bottom: d.hands.minute.offset,
+                                    width: d.hands.minute.width,
+                                    height: d.hands.minute.length,
+                                    clipPath: getTaperedClip(d.hands.minute)
+                                }}
                             />
                         </div>
 
@@ -142,19 +198,27 @@ const ClockWidget = ({ scale }) => {
                         <div ref={secondRef} className="absolute size-0 z-30">
                             <div
                                 className="absolute left-1/2 -translate-x-1/2 bg-[#FF9500] rounded-full"
-                                style={{ bottom: d.hands.second[2], width: d.hands.second[0], height: d.hands.second[1] }}
+                                style={{ bottom: d.hands.second.offset, width: d.hands.second.width, height: d.hands.second.length }}
                             />
                         </div>
 
                         {/* Center Pin */}
                         <div
-                            className="relative bg-[#FF9500] rounded-full z-40 border-white shadow-sm"
+                            className="relative bg-[#FF9500] rounded-full z-40 border-black shadow-sm flex items-center justify-center"
                             style={{
                                 width: d.pinSize,
                                 height: d.pinSize,
-                                borderWidth: 2 * CLOCK_SCALE + 'px'
+                                borderWidth: 1.5 * CLOCK_SCALE + 'px'
                             }}
-                        />
+                        >
+                            <div
+                                className="bg-white rounded-full"
+                                style={{
+                                    width: d.innerPinSize + 'px',
+                                    height: d.innerPinSize + 'px'
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
