@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 
 const ClockWidget = ({ scale }) => {
     // --- ADJUST THIS VARIABLE TO SCALE THE DESKTOP CLOCK ---
@@ -99,25 +99,28 @@ const ClockWidget = ({ scale }) => {
     }, []);
 
     // Generate markings
-    const markings = [];
-    for (let i = 0; i < 60; i++) {
-        const isHour = i % 5 === 0;
-        markings.push(
-            <div
-                key={i}
-                className="absolute left-1/2 top-0"
-                style={{
-                    transform: `translateX(-50%) rotate(${i * 6}deg)`,
-                    transformOrigin: `center ${d.markingOrigin}px`,
-                    height: 5 * CLOCK_SCALE + 'px',
-                    width: 1.5 * CLOCK_SCALE + 'px',
-                    backgroundColor: isHour ? 'black' : 'rgba(0,0,0,0.25)',
-                }}
-            />
-        );
-    }
+    const markings = useMemo(() => {
+        const result = [];
+        for (let i = 0; i < 60; i++) {
+            const isHour = i % 5 === 0;
+            result.push(
+                <div
+                    key={i}
+                    className="absolute left-1/2 top-0"
+                    style={{
+                        transform: `translateX(-50%) rotate(${i * 6}deg)`,
+                        transformOrigin: `center ${d.markingOrigin}px`,
+                        height: 5 * CLOCK_SCALE + 'px',
+                        width: 1.5 * CLOCK_SCALE + 'px',
+                        backgroundColor: isHour ? 'black' : 'rgba(0,0,0,0.25)',
+                    }}
+                />
+            );
+        }
+        return result;
+    }, [d.markingOrigin, CLOCK_SCALE]);
 
-    const numbers = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    const numbers = useMemo(() => [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], []);
 
     return (
         <div
