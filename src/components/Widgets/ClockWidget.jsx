@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 const ClockWidget = ({ scale }) => {
     // --- ADJUST THIS VARIABLE TO SCALE THE DESKTOP CLOCK ---
@@ -19,32 +19,38 @@ const ClockWidget = ({ scale }) => {
         pinSize: 9 * CLOCK_SCALE,
         // Hand Dimensions [width, length, offset]
         hands: {
-            hour: [5.5 * CLOCK_SCALE, 34 * CLOCK_SCALE, -3 * CLOCK_SCALE],
-            minute: [3.8 * CLOCK_SCALE, 54 * CLOCK_SCALE, -3 * CLOCK_SCALE],
-            second: [1.2 * CLOCK_SCALE, 72 * CLOCK_SCALE, -15 * CLOCK_SCALE]
+            hour: [5.5 * CLOCK_SCALE, 42 * CLOCK_SCALE, -3 * CLOCK_SCALE],
+            minute: [3.8 * CLOCK_SCALE, 71.5 * CLOCK_SCALE, -3 * CLOCK_SCALE],
+            second: [1.2 * CLOCK_SCALE, 85 * CLOCK_SCALE, -15 * CLOCK_SCALE]
         }
     };
 
-    const [time, setTime] = useState(new Date());
+    const hourRef = useRef(null);
+    const minuteRef = useRef(null);
+    const secondRef = useRef(null);
 
     useEffect(() => {
         let frameId;
         const update = () => {
-            setTime(new Date());
+            const now = new Date();
+            const ms = now.getMilliseconds();
+            const s = now.getSeconds();
+            const m = now.getMinutes();
+            const h = now.getHours();
+
+            const secondDeg = (s + ms / 1000) * 6;
+            const minuteDeg = (m + s / 60 + ms / 60000) * 6;
+            const hourDeg = ((h % 12) + m / 60 + s / 3600) * 30;
+
+            if (hourRef.current) hourRef.current.style.transform = `rotate(${hourDeg}deg)`;
+            if (minuteRef.current) minuteRef.current.style.transform = `rotate(${minuteDeg}deg)`;
+            if (secondRef.current) secondRef.current.style.transform = `rotate(${secondDeg}deg)`;
+
             frameId = requestAnimationFrame(update);
         };
         frameId = requestAnimationFrame(update);
         return () => cancelAnimationFrame(frameId);
     }, []);
-
-    const ms = time.getMilliseconds();
-    const s = time.getSeconds();
-    const m = time.getMinutes();
-    const h = time.getHours();
-
-    const secondDeg = (s + ms / 1000) * 6;
-    const minuteDeg = (m + s / 60 + ms / 60000) * 6;
-    const hourDeg = ((h % 12) + m / 60 + s / 3600) * 30;
 
     // Generate markings
     const markings = [];
@@ -117,7 +123,7 @@ const ClockWidget = ({ scale }) => {
                     {/* Hands Container */}
                     <div className="absolute inset-0 flex items-center justify-center">
                         {/* Hour Hand */}
-                        <div className="absolute size-0 z-10" style={{ transform: `rotate(${hourDeg}deg)` }}>
+                        <div ref={hourRef} className="absolute size-0 z-10">
                             <div
                                 className="absolute left-1/2 -translate-x-1/2 bg-black rounded-full"
                                 style={{ bottom: d.hands.hour[2], width: d.hands.hour[0], height: d.hands.hour[1] }}
@@ -125,7 +131,7 @@ const ClockWidget = ({ scale }) => {
                         </div>
 
                         {/* Minute Hand */}
-                        <div className="absolute size-0 z-20" style={{ transform: `rotate(${minuteDeg}deg)` }}>
+                        <div ref={minuteRef} className="absolute size-0 z-20">
                             <div
                                 className="absolute left-1/2 -translate-x-1/2 bg-black rounded-full"
                                 style={{ bottom: d.hands.minute[2], width: d.hands.minute[0], height: d.hands.minute[1] }}
@@ -133,7 +139,7 @@ const ClockWidget = ({ scale }) => {
                         </div>
 
                         {/* Second Hand */}
-                        <div className="absolute size-0 z-30" style={{ transform: `rotate(${secondDeg}deg)` }}>
+                        <div ref={secondRef} className="absolute size-0 z-30">
                             <div
                                 className="absolute left-1/2 -translate-x-1/2 bg-[#FF9500] rounded-full"
                                 style={{ bottom: d.hands.second[2], width: d.hands.second[0], height: d.hands.second[1] }}
