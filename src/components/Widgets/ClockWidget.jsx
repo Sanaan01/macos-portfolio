@@ -22,9 +22,9 @@ const ClockWidget = ({ scale }) => {
         hands: (() => {
             const TAPER_CONFIG = {
                 width: 5.5 * CLOCK_SCALE,
-                thinWidth: 3 * CLOCK_SCALE,
-                thinStop: 12 * CLOCK_SCALE,
-                transitionLength: 4 * CLOCK_SCALE
+                thinWidth: 2.5 * CLOCK_SCALE,
+                thinStop: 11 * CLOCK_SCALE,
+                transitionLength: 3.5 * CLOCK_SCALE
             };
             return {
                 hour: {
@@ -211,7 +211,7 @@ const ClockWidget = ({ scale }) => {
                             style={{
                                 width: d.pinSize,
                                 height: d.pinSize,
-                                borderWidth: 1.5 * CLOCK_SCALE + 'px'
+                                borderWidth: 1.9 * CLOCK_SCALE + 'px'
                             }}
                         >
                             <div
