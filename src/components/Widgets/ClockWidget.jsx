@@ -113,6 +113,7 @@ const ClockWidget = ({ scale }) => {
                         height: 5 * CLOCK_SCALE + 'px',
                         width: 1.5 * CLOCK_SCALE + 'px',
                         backgroundColor: isHour ? 'black' : 'rgba(0,0,0,0.25)',
+                        borderRadius: '999px',
                     }}
                 />
             );
