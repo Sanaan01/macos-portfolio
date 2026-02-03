@@ -40,9 +40,33 @@ function playlistGeneratorPlugin() {
   };
 }
 
+import { execSync } from 'child_process';
+import fs from 'fs';
+
+// Get build-time constants
+// Cloudflare Pages provides CF_PAGES_COMMIT_SHA and CF_PAGES_BRANCH
+let gitCommit = process.env.CF_PAGES_COMMIT_SHA?.slice(0, 7) || 'dev';
+let gitBranch = process.env.CF_PAGES_BRANCH || 'unknown';
+
+// Fallback to git commands for local development
+if (gitCommit === 'dev') {
+  try {
+    gitCommit = execSync('git rev-parse --short HEAD').toString().trim();
+    gitBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+  } catch { }
+}
+
+const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), playlistGeneratorPlugin()],
+  define: {
+    __GIT_COMMIT__: JSON.stringify(gitCommit),
+    __GIT_BRANCH__: JSON.stringify(gitBranch),
+    __APP_VERSION__: JSON.stringify(pkg.version),
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
   resolve: {
     alias: {
       '#components': resolve(dirname(fileURLToPath(import.meta.url)), 'src/components'),

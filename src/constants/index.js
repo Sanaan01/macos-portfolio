@@ -478,6 +478,8 @@ const WINDOW_CONFIG = {
     controlcenter: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     music: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     mobilemusic: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    about: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    mobileabout: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

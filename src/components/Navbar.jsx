@@ -44,7 +44,18 @@ const Navbar = () => {
   return (
     <nav className="max-sm:hidden">
       <div>
-        <img src="/images/logo.svg" className="p-1 dark:invert rounded cursor-default" alt="logo" />
+        <img
+          src="/images/logo.svg"
+          className="p-1 dark:invert rounded cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+          alt="logo"
+          onClick={() => {
+            if (windows.about.isOpen) {
+              closeWindow("about");
+            } else {
+              openWindow("about");
+            }
+          }}
+        />
         <p className="font-bold"> Sanaan's Portfolio</p>
 
         <ul>
