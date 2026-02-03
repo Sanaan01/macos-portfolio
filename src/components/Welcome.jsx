@@ -9,7 +9,7 @@ const renderText = (text, className, baseWeight = 400) =>
 {
   return [...text].map((char, i) => (
     <span key={i}
-          className={className}
+          className={`${className} welcome-letter`}
           style={{fontVariationSettings: `'wght' ${baseWeight}`}}
           aria-hidden="true"
     >

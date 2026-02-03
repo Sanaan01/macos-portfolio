@@ -124,6 +124,15 @@ body {
 
     #welcome {
         @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:w-full max-sm:px-10;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: geometricPrecision;
+    }
+
+    #welcome .welcome-letter {
+        display: inline-block;
+        will-change: font-variation-settings;
+        backface-visibility: hidden;
+        transform: translateZ(0);
     }
 
     #not-found {
