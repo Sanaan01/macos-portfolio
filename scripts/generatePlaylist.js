@@ -172,7 +172,9 @@ async function generatePlaylist() {
     return playlist;
 }
 
-// Run if called directly
-generatePlaylist().catch(console.error);
+// Run only when executed directly (not when imported)
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    generatePlaylist().catch(console.error);
+}
 
 export { generatePlaylist };
