@@ -65,7 +65,7 @@ const Home = () => {
     <section id="home">
       {/* Desktop Home Icons */}
       <div className="max-sm:hidden">
-        <div className="widget absolute top-20 right-10 z-0">
+        <div className="widget absolute top-60 right-10 z-0">
           <ClockWidget />
         </div>
 
