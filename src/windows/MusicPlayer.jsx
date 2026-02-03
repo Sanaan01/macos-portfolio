@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SkipBack, Play, Pause, SkipForward } from "lucide-react";
-import { playlist } from "#constants";
+import MarqueeText from "#components/MarqueeText.jsx";
 
 const MusicPlayer = () => {
     const { windows } = useWindowStore();
@@ -14,13 +14,22 @@ const MusicPlayer = () => {
     const isSeeking = useRef(false);
     const wasPlayingBeforeSeek = useRef(false);
 
+    const [playlist, setPlaylist] = useState([]);
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [seekTime, setSeekTime] = useState(0);
 
-    const currentTrack = playlist[currentTrackIndex];
+    const currentTrack = playlist[currentTrackIndex] || { title: '', artist: '', album: '', src: '', cover: '' };
+
+    // Fetch playlist on mount
+    useEffect(() => {
+        fetch('/playlist.json')
+            .then(res => res.json())
+            .then(data => setPlaylist(data))
+            .catch(err => console.error('Failed to load playlist:', err));
+    }, []);
 
     useGSAP(() => {
         const el = containerRef.current;
@@ -52,6 +61,7 @@ const MusicPlayer = () => {
         isFirstMount.current = false;
     }, [isOpen]);
 
+    // Audio event listeners
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
@@ -64,14 +74,15 @@ const MusicPlayer = () => {
         const handleLoadedMetadata = () => setDuration(audio.duration);
         const handleEnded = () => {
             // Auto-advance to next track when current ends
-            if (currentTrackIndex < playlist.length - 1) {
-                setCurrentTrackIndex(prev => prev + 1);
-                setCurrentTime(0);
-                // Keep playing set to true, audio will auto-play from playTrack effect
-            } else {
-                // Last track ended, stop
+            setCurrentTrackIndex(prev => {
+                if (prev < playlist.length - 1) {
+                    return prev + 1;
+                }
+                // Last track ended, stop playing
                 setIsPlaying(false);
-            }
+                return prev;
+            });
+            setCurrentTime(0);
         };
 
         audio.addEventListener("timeupdate", handleTimeUpdate);
@@ -83,7 +94,27 @@ const MusicPlayer = () => {
             audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
             audio.removeEventListener("ended", handleEnded);
         };
-    }, []);
+    }, [playlist.length]);
+
+    // Effect to load and play audio when track changes
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio || playlist.length === 0) return;
+
+        // Load the new source
+        audio.load();
+        setDuration(0);
+        setCurrentTime(0);
+
+        // If we should be playing, start playback
+        if (isPlaying) {
+            audio.play().catch(err => {
+                console.error('Playback failed:', err);
+                setIsPlaying(false);
+            });
+        }
+    }, [currentTrackIndex, playlist]);
+
 
     const togglePlay = () => {
         const audio = audioRef.current;
@@ -168,7 +199,7 @@ const MusicPlayer = () => {
     return (
         <div
             ref={containerRef}
-            className="fixed w-[320px] bg-white/70 dark:bg-[#1e1e1e]/70 backdrop-blur-2xl rounded-2xl shadow-2xl select-none border border-white/20 dark:border-white/10 p-4 music-player"
+            className="fixed w-[320px] rounded-2xl shadow-2xl select-none border border-white/20 dark:border-white/10 p-4 music-player overflow-hidden"
             style={{
                 zIndex: 3100,
                 top: data?.bottom ? `${data.bottom + 8}px` : "48px",
@@ -176,6 +207,22 @@ const MusicPlayer = () => {
                 display: "none"
             }}
         >
+            {/* Blurred Album Art Background */}
+            <div
+                className="absolute inset-0 -z-20"
+                style={{
+                    backgroundImage: currentTrack.cover ? `url(${currentTrack.cover})` : 'none',
+                    backgroundSize: '200% 200%',
+                    backgroundPosition: 'center',
+                    filter: 'blur(40px) saturate(1.5)',
+                    opacity: 0.6,
+                    transform: 'scale(1.5)',
+                    transition: 'background-image 0.5s ease-in-out',
+                }}
+            />
+            {/* Overlay for readability */}
+            <div className="absolute inset-0 -z-10 bg-white/60 dark:bg-[#1e1e1e]/60 backdrop-blur-xl" />
+
             <audio ref={audioRef} src={currentTrack.src} />
 
             {/* Track Info */}
@@ -188,8 +235,16 @@ const MusicPlayer = () => {
                     />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">{currentTrack.title}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{currentTrack.artist} — {currentTrack.album}</p>
+                    <MarqueeText
+                        text={currentTrack.title}
+                        className="text-lg font-bold text-gray-900 dark:text-white"
+                        speed={25}
+                    />
+                    <MarqueeText
+                        text={`${currentTrack.artist} — ${currentTrack.album}`}
+                        className="text-sm text-gray-500 dark:text-gray-400"
+                        speed={20}
+                    />
                 </div>
             </div>
 

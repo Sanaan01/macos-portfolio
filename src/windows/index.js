@@ -8,5 +8,6 @@ import Contact from "#windows/Contact.jsx";
 import Gallery from "#windows/Gallery.jsx";
 import ControlCenter from "#windows/ControlCenter.jsx";
 import MusicPlayer from "#windows/MusicPlayer.jsx";
+import MobileMusic from "#windows/MobileMusic.jsx";
 
-export { Terminal, Safari, Resume, Finder, Text, Image, Contact, Gallery, ControlCenter, MusicPlayer };
+export { Terminal, Safari, Resume, Finder, Text, Image, Contact, Gallery, ControlCenter, MusicPlayer, MobileMusic };

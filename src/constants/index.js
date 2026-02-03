@@ -233,19 +233,6 @@ const gallery = [
     },
 ];
 
-// Music player playlist
-const playlist = [
-    {
-        title: "Out of Time",
-        artist: "The Weeknd",
-        album: "Dawn FM",
-        src: "/audio/The Weeknd - Out of Time.mp3",
-        cover: "/audio/cover.webp"
-    }
-    // Add more tracks here:
-    // { title: "...", artist: "...", album: "...", src: "/audio/...", cover: "/audio/..." }
-];
-
 export {
     navLinks,
     navIcons,
@@ -255,7 +242,6 @@ export {
     socials,
     galleryLinks,
     gallery,
-    playlist,
 };
 
 const WORK_LOCATION = {
@@ -491,6 +477,7 @@ const WINDOW_CONFIG = {
     imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     controlcenter: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     music: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    mobilemusic: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };
