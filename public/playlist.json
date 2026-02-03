@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "title": "Path of the Wind (My Neighbor Totoro)",
     "artist": "Shoyo",
     "album": "ghibli lofi",
@@ -7,6 +8,7 @@
     "cover": "/audio/covers/my_neighbor_totoro_shoyo.jpg"
   },
   {
+    "id": 2,
     "title": "Morning Dew",
     "artist": "LoFi Waiter",
     "album": "Rainy Nights",
