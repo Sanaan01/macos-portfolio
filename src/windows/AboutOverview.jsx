@@ -21,22 +21,27 @@ const useAboutData = () => {
     const [viewport, setViewport] = useState({ width: 0, height: 0, dpr: 1 });
     const [uptime, setUptime] = useState("—");
 
-    // Base portfolio size (JS, CSS, images, fonts, etc.) - approximately 3MB
+    // Base portfolio size (JS, CSS, static images, fonts, etc.) - approximately 3MB
     const BASE_PORTFOLIO_SIZE_MB = 3;
 
-    // Calculate loaded assets: base portfolio + gallery images
+    // Calculate loaded assets: base portfolio + gallery images from API
     useEffect(() => {
         const calculateAssets = async () => {
             try {
                 let totalSizeMB = BASE_PORTFOLIO_SIZE_MB;
 
-                // Add gallery images size from API
+                // Get actual gallery size from API
                 const res = await fetch('/api/gallery.json');
                 if (res.ok) {
                     const data = await res.json();
-                    const images = data.images || [];
-                    // Estimate ~500KB per gallery image on average
-                    totalSizeMB += (images.length * 0.5);
+                    // Use actual totalSize from API if available (in bytes)
+                    if (data.totalSize) {
+                        totalSizeMB += data.totalSize / (1024 * 1024);
+                    } else {
+                        // Fallback: estimate ~500KB per image
+                        const images = data.images || [];
+                        totalSizeMB += (images.length * 0.5);
+                    }
                 }
 
                 // Add static gallery images (~300KB each)

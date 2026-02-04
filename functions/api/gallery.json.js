@@ -40,9 +40,15 @@ export async function onRequest(context) {
             return imageExtensions.some(ext => key.endsWith(ext));
         });
 
+        // Track total size for stats
+        let totalSize = 0;
+
         // Get metadata for each image
         const images = await Promise.all(
             imageObjects.map(async (obj) => {
+                // Add to total size
+                totalSize += obj.size || 0;
+
                 try {
                     // Get object with metadata using head()
                     const headResult = await env.MY_BUCKET.head(obj.key);
@@ -66,6 +72,7 @@ export async function onRequest(context) {
                         name,
                         img: fullUrl,
                         thumbnail: thumbnailUrl,
+                        size: obj.size || 0,
                         categories,
                         uploadedAt: customMetadata.uploadedAt || obj.uploaded?.toISOString(),
                     };
@@ -78,6 +85,7 @@ export async function onRequest(context) {
                         name: obj.key.split('/').pop(),
                         img: fullUrl,
                         thumbnail: `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85,format=auto/${fullUrl}`,
+                        size: obj.size || 0,
                         categories: ['Library'],
                     };
                 }
@@ -149,7 +157,7 @@ export async function onRequest(context) {
         }
 
         return new Response(
-            JSON.stringify({ images: orderedImages, categories, order: savedOrder }),
+            JSON.stringify({ images: orderedImages, categories, order: savedOrder, totalSize }),
             {
                 headers: {
                     'Content-Type': 'application/json',
