@@ -12,6 +12,7 @@ const useAudioStore = create((set, get) => ({
     isPlaying: false,
     currentTime: 0,
     duration: 0,
+    trackLoaded: false, // Lazy loading: audio only loads on first play
 
     // Shuffle and repeat state
     shuffleEnabled: false,
@@ -30,12 +31,9 @@ const useAudioStore = create((set, get) => ({
     // Get the shared audio element
     getAudioElement: () => sharedAudio,
 
-    // Initialize playlist and optionally load first track
-    setPlaylist: (playlist, autoLoadFirst = true) => {
-        set({ playlist });
-        if (autoLoadFirst && playlist.length > 0) {
-            get().loadTrack(false);
-        }
+    // Initialize playlist (lazy loading: audio not loaded until first play)
+    setPlaylist: (playlist) => {
+        set({ playlist, trackLoaded: false });
     },
 
     // Sync audio state (called from components)
@@ -47,9 +45,16 @@ const useAudioStore = create((set, get) => ({
         });
     },
 
-    // Play/pause controls
+    // Play/pause controls (lazy loads track on first play)
     play: async () => {
         if (!sharedAudio) return;
+
+        // Lazy load: if track not loaded yet, load it first
+        const { trackLoaded } = get();
+        if (!trackLoaded) {
+            await get().loadTrack(false);
+        }
+
         try {
             await sharedAudio.play();
             set({ isPlaying: true });
@@ -76,28 +81,28 @@ const useAudioStore = create((set, get) => ({
 
     // Track navigation
     nextTrack: () => {
-        const { playlist, currentTrackIndex, isPlaying, shuffleEnabled } = get();
+        const { playlist, currentTrackIndex, shuffleEnabled } = get();
 
         // Shuffle mode: play random track
         if (shuffleEnabled) {
             const randomIndex = get().getRandomTrackIndex();
             set({ currentTrackIndex: randomIndex, currentTime: 0 });
-            get().loadTrack(isPlaying);
+            get().loadTrack(true); // Always auto-play on manual navigation
             return;
         }
 
         // Normal sequential playback
         if (currentTrackIndex < playlist.length - 1) {
             set({ currentTrackIndex: currentTrackIndex + 1, currentTime: 0 });
-            get().loadTrack(isPlaying);
+            get().loadTrack(true); // Always auto-play on manual navigation
         }
     },
 
     prevTrack: () => {
-        const { currentTrackIndex, isPlaying } = get();
+        const { currentTrackIndex } = get();
         if (currentTrackIndex > 0) {
             set({ currentTrackIndex: currentTrackIndex - 1, currentTime: 0 });
-            get().loadTrack(isPlaying);
+            get().loadTrack(true); // Always auto-play on manual navigation
         }
     },
 
@@ -117,7 +122,7 @@ const useAudioStore = create((set, get) => ({
 
         sharedAudio.src = track.src;
         sharedAudio.load();
-        set({ duration: 0, currentTime: 0 });
+        set({ duration: 0, currentTime: 0, trackLoaded: true });
 
         if (autoPlay) {
             try {

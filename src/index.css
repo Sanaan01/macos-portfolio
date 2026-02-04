@@ -55,6 +55,12 @@ body {
         padding-right: env(safe-area-inset-right);
     }
 
+    @media (max-width: 639px) {
+        main {
+            background-image: url("/images/wallpaper.webp");
+        }
+    }
+
     nav {
         @apply flex justify-between items-center bg-white/50 dark:bg-[#323232]/50 backdrop-blur-3xl p-2 px-5 select-none text-black dark:text-white;
 

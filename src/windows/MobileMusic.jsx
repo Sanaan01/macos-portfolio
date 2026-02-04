@@ -134,6 +134,7 @@ const MobileMusic = () => {
                         src={currentTrack.cover}
                         alt="Album Art"
                         className="album-art"
+                        loading="lazy"
                     />
                 </div>
 
