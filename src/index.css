@@ -734,8 +734,8 @@ body {
     }
 
     #about {
-        @apply w-[600px] h-auto absolute top-32 left-1/2 -translate-x-1/2 bg-white/95 dark:bg-[#2d2d2d]/95 backdrop-blur-xl shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
-        @apply max-sm:fixed max-sm:inset-0 max-sm:w-full max-sm:h-full max-sm:rounded-none max-sm:top-0 max-sm:left-0 max-sm:translate-x-0;
+        @apply w-[600px] h-auto absolute top-32 left-1/4 bg-white/95 dark:bg-[#2d2d2d]/95 backdrop-blur-xl shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+        @apply max-sm:fixed max-sm:inset-0 max-sm:w-full max-sm:h-full max-sm:rounded-none max-sm:top-0 max-sm:left-0;
 
         @media (max-width: 639px) {
             background: #f2f2f7;
