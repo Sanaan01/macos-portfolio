@@ -28,7 +28,7 @@ const mobileApps = [
   },
   {
     id: "mobileabout",
-    name: "Settings",
+    name: "System",
     icon: "settings.png",
   }
 ];

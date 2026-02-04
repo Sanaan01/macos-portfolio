@@ -59,13 +59,13 @@ const App = () => {
           <Contact />
           <Home />
           <Gallery />
+          <MusicPlayer />
+          <MobileMusic />
+          <AboutOverview />
+          <MobileAboutWindow />
         </>
       )}
       <ControlCenter />
-      <MusicPlayer />
-      <MobileMusic />
-      <AboutOverview />
-      <MobileAboutWindow />
     </main>
   )
 }

@@ -13,10 +13,8 @@ const GIT_BRANCH = typeof __GIT_BRANCH__ !== 'undefined' ? __GIT_BRANCH__ : 'unk
 const APP_VERSION = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.0';
 const BUILD_TIME = typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : new Date().toISOString();
 
-// Hardcoded deploy date - update this when you deploy
-const DEPLOY_DATE = new Date('2026-02-03T12:00:00Z');
-
-const AboutOverview = () => {
+// Custom hook for shared About data and effects
+const useAboutData = () => {
     const [loadedAssets, setLoadedAssets] = useState("—");
     const [galleryCount, setGalleryCount] = useState(staticGallery.length);
     const [deviceInfo, setDeviceInfo] = useState({ platform: "—", browser: "—" });
@@ -29,22 +27,16 @@ const AboutOverview = () => {
             try {
                 const resources = performance.getEntriesByType("resource");
                 let totalSize = 0;
-
                 for (const resource of resources) {
-                    // Use transferSize if available, fallback to encodedBodySize
                     const size = resource.transferSize || resource.encodedBodySize || 0;
                     totalSize += size;
                 }
-
-                // Convert to MB
                 const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
                 setLoadedAssets(`${sizeMB} MB`);
             } catch {
                 setLoadedAssets("—");
             }
         };
-
-        // Wait for resources to load
         const timer = setTimeout(calculateAssets, 500);
         return () => clearTimeout(timer);
     }, []);
@@ -59,9 +51,7 @@ const AboutOverview = () => {
                     const r2Count = data.images?.length || 0;
                     setGalleryCount(r2Count + staticGallery.length);
                 }
-            } catch {
-                // Keep static count on error
-            }
+            } catch { }
         };
         fetchGalleryCount();
     }, []);
@@ -72,7 +62,6 @@ const AboutOverview = () => {
             let platform = "Unknown";
             let browser = "Unknown";
 
-            // Try userAgentData first (Chromium)
             if (navigator.userAgentData) {
                 platform = navigator.userAgentData.platform || "Unknown";
                 const brands = navigator.userAgentData.brands || [];
@@ -81,9 +70,7 @@ const AboutOverview = () => {
                 ) || brands[0];
                 browser = mainBrand?.brand || "Chrome";
             } else {
-                // Fallback to userAgent parsing
                 const ua = navigator.userAgent;
-
                 if (ua.includes("Win")) platform = "Windows";
                 else if (ua.includes("Mac")) platform = "macOS";
                 else if (ua.includes("Linux")) platform = "Linux";
@@ -98,7 +85,6 @@ const AboutOverview = () => {
 
             setDeviceInfo({ platform, browser });
         };
-
         getDeviceInfo();
     }, []);
 
@@ -111,7 +97,6 @@ const AboutOverview = () => {
                 dpr: window.devicePixelRatio || 1,
             });
         };
-
         updateViewport();
         window.addEventListener("resize", updateViewport);
         return () => window.removeEventListener("resize", updateViewport);
@@ -124,12 +109,10 @@ const AboutOverview = () => {
             const deployed = dayjs(BUILD_TIME);
             const diffMs = now.diff(deployed);
 
-            // Calculate days, hours, minutes
             const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
-            // Format as "Xd Xh Xm"
             let uptimeStr = '';
             if (days > 0) uptimeStr += `${days}d `;
             if (hours > 0 || days > 0) uptimeStr += `${hours}h `;
@@ -137,11 +120,16 @@ const AboutOverview = () => {
 
             setUptime(uptimeStr.trim());
         };
-
         updateUptime();
-        const interval = setInterval(updateUptime, 60000); // Update every minute
+        const interval = setInterval(updateUptime, 60000);
         return () => clearInterval(interval);
     }, []);
+
+    return { loadedAssets, galleryCount, deviceInfo, viewport, uptime };
+};
+
+const AboutOverview = () => {
+    const { loadedAssets, galleryCount, deviceInfo, viewport, uptime } = useAboutData();
 
     return (
         <>
@@ -208,103 +196,7 @@ const AboutOverview = () => {
 
 // Mobile About component - iOS Settings style
 const MobileAbout = () => {
-    const [loadedAssets, setLoadedAssets] = useState("—");
-    const [galleryCount, setGalleryCount] = useState(staticGallery.length);
-    const [deviceInfo, setDeviceInfo] = useState({ platform: "—", browser: "—" });
-    const [viewport, setViewport] = useState({ width: 0, height: 0, dpr: 1 });
-    const [uptime, setUptime] = useState("—");
-
-    // Reuse the same effects as desktop
-    useEffect(() => {
-        const calculateAssets = () => {
-            try {
-                const resources = performance.getEntriesByType("resource");
-                let totalSize = 0;
-                for (const resource of resources) {
-                    const size = resource.transferSize || resource.encodedBodySize || 0;
-                    totalSize += size;
-                }
-                const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
-                setLoadedAssets(`${sizeMB} MB`);
-            } catch {
-                setLoadedAssets("—");
-            }
-        };
-        const timer = setTimeout(calculateAssets, 500);
-        return () => clearTimeout(timer);
-    }, []);
-
-    useEffect(() => {
-        const fetchGalleryCount = async () => {
-            try {
-                const res = await fetch('/api/gallery.json');
-                if (res.ok) {
-                    const data = await res.json();
-                    const r2Count = data.images?.length || 0;
-                    setGalleryCount(r2Count + staticGallery.length);
-                }
-            } catch { }
-        };
-        fetchGalleryCount();
-    }, []);
-
-    useEffect(() => {
-        const getDeviceInfo = () => {
-            let platform = "Unknown";
-            let browser = "Unknown";
-            if (navigator.userAgentData) {
-                platform = navigator.userAgentData.platform || "Unknown";
-                const brands = navigator.userAgentData.brands || [];
-                const mainBrand = brands.find(b => !b.brand.includes("Not") && !b.brand.includes("Chromium")) || brands[0];
-                browser = mainBrand?.brand || "Chrome";
-            } else {
-                const ua = navigator.userAgent;
-                if (ua.includes("Win")) platform = "Windows";
-                else if (ua.includes("Mac")) platform = "macOS";
-                else if (ua.includes("Linux")) platform = "Linux";
-                else if (ua.includes("Android")) platform = "Android";
-                else if (ua.includes("iPhone") || ua.includes("iPad")) platform = "iOS";
-                if (ua.includes("Firefox")) browser = "Firefox";
-                else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
-                else if (ua.includes("Edge")) browser = "Edge";
-                else if (ua.includes("Chrome")) browser = "Chrome";
-            }
-            setDeviceInfo({ platform, browser });
-        };
-        getDeviceInfo();
-    }, []);
-
-    useEffect(() => {
-        const updateViewport = () => {
-            setViewport({
-                width: window.innerWidth,
-                height: window.innerHeight,
-                dpr: window.devicePixelRatio || 1,
-            });
-        };
-        updateViewport();
-        window.addEventListener("resize", updateViewport);
-        return () => window.removeEventListener("resize", updateViewport);
-    }, []);
-
-    useEffect(() => {
-        const updateUptime = () => {
-            const now = dayjs();
-            const deployed = dayjs(BUILD_TIME);
-            const diffMs = now.diff(deployed);
-            const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-            let uptimeStr = '';
-            if (days > 0) uptimeStr += `${days}d `;
-            if (hours > 0 || days > 0) uptimeStr += `${hours}h `;
-            uptimeStr += `${minutes}m`;
-            setUptime(uptimeStr.trim());
-        };
-        updateUptime();
-        const interval = setInterval(updateUptime, 60000);
-        return () => clearInterval(interval);
-    }, []);
+    const { loadedAssets, galleryCount, deviceInfo, viewport, uptime } = useAboutData();
 
     return (
         <>
@@ -385,3 +277,4 @@ const MobileAboutWindow = WindowWrapper(MobileAbout, "mobileabout");
 
 export default AboutOverviewWindow;
 export { MobileAboutWindow };
+
