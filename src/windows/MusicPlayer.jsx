@@ -27,8 +27,8 @@ const MusicPlayer = () => {
         togglePlay,
         startSeek,
         endSeek,
-        seek,
-        loadTrack,
+        skipBack,
+        skipForward,
         toggleShuffle,
         cycleRepeatMode,
     } = useAudioStore();
@@ -96,24 +96,6 @@ const MusicPlayer = () => {
 
     const handleSeekEnd = () => {
         endSeek(localSeekTime.current);
-    };
-
-    // Skip back: if < 5 seconds and not first track, go to previous; otherwise restart
-    const handleSkipBack = () => {
-        if (currentTime < 5 && currentTrackIndex > 0) {
-            useAudioStore.getState().prevTrack();
-        } else {
-            seek(0);
-        }
-    };
-
-    // Skip forward: go to next track or loop to first
-    const handleSkipForward = () => {
-        if (currentTrackIndex < playlist.length - 1) {
-            useAudioStore.getState().nextTrack();
-        } else {
-            useAudioStore.getState().setTrack(0);
-        }
     };
 
     return (
@@ -203,7 +185,7 @@ const MusicPlayer = () => {
                     <Shuffle size={18} />
                 </button>
                 <button
-                    onClick={handleSkipBack}
+                    onClick={skipBack}
                     className="text-gray-800 dark:text-white hover:opacity-70 hover:scale-110 active:scale-95 transition-all duration-150"
                 >
                     <SkipBack size={24} fill="currentColor" />
@@ -215,7 +197,7 @@ const MusicPlayer = () => {
                     {isPlaying ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" />}
                 </button>
                 <button
-                    onClick={handleSkipForward}
+                    onClick={skipForward}
                     className="text-gray-800 dark:text-white hover:opacity-70 hover:scale-110 active:scale-95 transition-all duration-150"
                 >
                     <SkipForward size={24} fill="currentColor" />

@@ -139,11 +139,13 @@ const useAboutData = () => {
         return () => clearInterval(interval);
     }, []);
 
-    return { loadedAssets, galleryCount, deviceInfo, viewport, uptime };
+    const TOTAL_LOC = "20,542";
+
+    return { loadedAssets, galleryCount, deviceInfo, viewport, uptime, TOTAL_LOC };
 };
 
 const AboutOverview = () => {
-    const { loadedAssets, galleryCount, deviceInfo, viewport, uptime } = useAboutData();
+    const { loadedAssets, galleryCount, deviceInfo, viewport, uptime, TOTAL_LOC } = useAboutData();
 
     return (
         <>
@@ -154,8 +156,21 @@ const AboutOverview = () => {
             </div>
 
             <div className="about-content">
-                {/* Left: Profile Image */}
-                <div className="about-image">
+                {/* Mobile Profile Header - iOS Settings style */}
+                <div className="about-profile-header hidden max-sm:flex">
+                    <img
+                        src="/images/sanaan.JPG"
+                        alt="Profile"
+                        className="about-profile-img-mobile"
+                    />
+                    <div className="about-profile-header-text">
+                        <h1 className="about-header-title">Sanaan's Portfolio</h1>
+                        <p className="about-header-subtitle">Photos, Projects and more!</p>
+                    </div>
+                </div>
+
+                {/* Desktop: Profile Image */}
+                <div className="about-image max-sm:hidden">
                     <img
                         src="/images/sanaan.JPG"
                         alt="Profile"
@@ -163,10 +178,10 @@ const AboutOverview = () => {
                     />
                 </div>
 
-                {/* Right: Info Panel */}
+                {/* Desktop: Info Panel / Mobile: Details */}
                 <div className="about-info">
-                    <h1 className="about-title">Sanaan's Portfolio</h1>
-                    <p className="about-version">Version {APP_VERSION}</p>
+                    <h1 className="about-title max-sm:hidden">Sanaan's Portfolio</h1>
+                    <p className="about-version max-sm:hidden">Version {APP_VERSION}</p>
 
                     <div className="about-details">
                         <div className="about-row">
@@ -175,7 +190,8 @@ const AboutOverview = () => {
                         </div>
                         <div className="about-row">
                             <span className="about-label">Commit</span>
-                            <span className="about-value">{GIT_COMMIT} ({GIT_BRANCH})</span>
+                            <span className="about-value max-sm:hidden">{GIT_COMMIT} ({GIT_BRANCH})</span>
+                            <span className="about-value hidden max-sm:inline">{GIT_COMMIT}</span>
                         </div>
                         <div className="about-row">
                             <span className="about-label">Built</span>
@@ -187,15 +203,26 @@ const AboutOverview = () => {
                         </div>
                         <div className="about-row">
                             <span className="about-label">Platform</span>
-                            <span className="about-value">{deviceInfo.platform} • {deviceInfo.browser}</span>
+                            <span className="about-value max-sm:hidden">{deviceInfo.platform} • {deviceInfo.browser}</span>
+                            <span className="about-value hidden max-sm:inline">{deviceInfo.platform}</span>
                         </div>
-                        <div className="about-row">
-                            <span className="about-label">Viewport</span>
-                            <span className="about-value">{viewport.width}×{viewport.height} @ {viewport.dpr}x</span>
+                        <div className="about-row max-sm:hidden">
+                            <span className="about-label">Browser</span>
+                            <span className="about-value">{deviceInfo.browser}</span>
+                        </div>
+                        <div className="about-row hidden max-sm:flex">
+                            <span className="about-label">Browser</span>
+                            <span className="about-value">{deviceInfo.browser}</span>
                         </div>
                         <div className="about-row">
                             <span className="about-label">Gallery</span>
-                            <span className="about-value">{galleryCount} photos</span>
+                            <span className="about-value max-sm:hidden">{galleryCount} photos</span>
+                            <span className="about-value hidden max-sm:inline">{galleryCount}</span>
+                        </div>
+                        <div className="about-row">
+                            <span className="about-label">Total Code</span>
+                            <span className="about-value max-sm:hidden">{TOTAL_LOC} lines</span>
+                            <span className="about-value hidden max-sm:inline">{TOTAL_LOC} lines</span>
                         </div>
                     </div>
 
@@ -208,87 +235,6 @@ const AboutOverview = () => {
     );
 };
 
-// Mobile About component - iOS Settings style
-const MobileAbout = () => {
-    const { loadedAssets, galleryCount, deviceInfo, viewport, uptime } = useAboutData();
-
-    return (
-        <>
-            <div id="window-header">
-                <WindowControls target="mobileabout" />
-                <h2>About</h2>
-                <div className="w-16" />
-            </div>
-
-            <div className="mobile-about-content">
-                {/* Section 1: Site Info */}
-                <div className="mobile-about-section">
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Name</span>
-                        <span className="mobile-about-value">Sanaan's Portfolio</span>
-                    </div>
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Version</span>
-                        <span className="mobile-about-value">{APP_VERSION}</span>
-                    </div>
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Platform</span>
-                        <span className="mobile-about-value">{deviceInfo.platform}</span>
-                    </div>
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Browser</span>
-                        <span className="mobile-about-value">{deviceInfo.browser}</span>
-                    </div>
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Commit</span>
-                        <span className="mobile-about-value">{GIT_COMMIT}</span>
-                    </div>
-                </div>
-
-                {/* Section 2: Build Info */}
-                <div className="mobile-about-section">
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Built</span>
-                        <span className="mobile-about-value">{dayjs(BUILD_TIME).format("MMM D, YYYY")}</span>
-                    </div>
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Uptime</span>
-                        <span className="mobile-about-value">{uptime}</span>
-                    </div>
-                </div>
-
-                {/* Section 3: Stats */}
-                <div className="mobile-about-section">
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Photos</span>
-                        <span className="mobile-about-value">{galleryCount}</span>
-                    </div>
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Loaded Assets</span>
-                        <span className="mobile-about-value">{loadedAssets}</span>
-                    </div>
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">Viewport</span>
-                        <span className="mobile-about-value">{viewport.width}×{viewport.height}</span>
-                    </div>
-                    <div className="mobile-about-row">
-                        <span className="mobile-about-label">DPR</span>
-                        <span className="mobile-about-value">{viewport.dpr}x</span>
-                    </div>
-                </div>
-
-                {/* Copyright */}
-                <p className="mobile-about-copyright">
-                    © {new Date().getFullYear()} sanaan.dev — All rights reserved
-                </p>
-            </div>
-        </>
-    );
-};
-
 const AboutOverviewWindow = WindowWrapper(AboutOverview, "about");
-const MobileAboutWindow = WindowWrapper(MobileAbout, "mobileabout");
 
 export default AboutOverviewWindow;
-export { MobileAboutWindow };
-

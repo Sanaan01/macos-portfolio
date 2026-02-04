@@ -27,7 +27,7 @@ const mobileApps = [
     icon: "applemusic.png",
   },
   {
-    id: "mobileabout",
+    id: "about",
     name: "System",
     icon: "settings.png",
   }

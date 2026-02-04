@@ -3,7 +3,7 @@ import { Draggable } from "gsap/Draggable"
 import { useEffect } from "react"
 
 import { Dock, Home, Navbar, MobileNavbar, Welcome, NotFound } from "#components"
-import { Contact, Finder, Gallery, Image, Resume, Safari, Terminal, Text, ControlCenter, MusicPlayer, MobileMusic, AboutOverview, MobileAboutWindow } from "#windows"
+import { Contact, Finder, Gallery, Image, Resume, Safari, Terminal, Text, ControlCenter, MusicPlayer, MobileMusic, AboutOverview } from "#windows"
 import useThemeStore from "#store/theme.js"
 
 
@@ -62,7 +62,6 @@ const App = () => {
           <MusicPlayer />
           <MobileMusic />
           <AboutOverview />
-          <MobileAboutWindow />
         </>
       )}
       <ControlCenter />
