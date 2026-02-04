@@ -114,6 +114,36 @@ const useAudioStore = create((set, get) => ({
         }
     },
 
+    // Skip back: if < 5 seconds, go to previous track (or wrap to last if loop mode); otherwise restart
+    skipBack: () => {
+        const { currentTime, currentTrackIndex, repeatMode, playlist } = get();
+        if (currentTime < 5) {
+            if (currentTrackIndex > 0) {
+                get().prevTrack();
+            } else if (repeatMode === 'all') {
+                // Wrap to last track in loop mode (always auto-play on manual navigation)
+                set({ currentTrackIndex: playlist.length - 1, currentTime: 0 });
+                get().loadTrack(true);
+            } else {
+                get().seek(0);
+            }
+        } else {
+            get().seek(0);
+        }
+    },
+
+    // Skip forward: go to next track or wrap to first if loop mode
+    skipForward: () => {
+        const { currentTrackIndex, playlist, repeatMode } = get();
+        if (currentTrackIndex < playlist.length - 1) {
+            get().nextTrack();
+        } else if (repeatMode === 'all') {
+            // Wrap to first track in loop mode (always auto-play on manual navigation)
+            set({ currentTrackIndex: 0, currentTime: 0 });
+            get().loadTrack(true);
+        }
+    },
+
     // Load current track into audio element
     loadTrack: async (autoPlay = false) => {
         if (!sharedAudio) return;

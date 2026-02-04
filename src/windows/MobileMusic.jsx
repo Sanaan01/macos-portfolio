@@ -21,12 +21,10 @@ const MobileMusic = () => {
         getCurrentTrack,
         setPlaylist,
         togglePlay,
-        nextTrack,
-        prevTrack,
         startSeek,
         endSeek,
-        seek,
-        loadTrack,
+        skipBack,
+        skipForward,
         toggleShuffle,
         cycleRepeatMode,
     } = useAudioStore();
@@ -81,24 +79,6 @@ const MobileMusic = () => {
 
     const handleSeekEnd = () => {
         endSeek(localSeekTime.current);
-    };
-
-    // Skip back: if < 5 seconds and not first track, go to previous; otherwise restart
-    const handleSkipBack = () => {
-        if (currentTime < 5 && currentTrackIndex > 0) {
-            prevTrack();
-        } else {
-            seek(0);
-        }
-    };
-
-    // Skip forward: go to next track or loop to first
-    const handleSkipForward = () => {
-        if (currentTrackIndex < playlist.length - 1) {
-            nextTrack();
-        } else {
-            useAudioStore.getState().setTrack(0);
-        }
     };
 
     const progressPercent = duration ? (currentTime / duration) * 100 : 0;
@@ -177,13 +157,13 @@ const MobileMusic = () => {
                 >
                     <Shuffle size={24} />
                 </button>
-                <button onClick={handleSkipBack} className="control-btn">
+                <button onClick={skipBack} className="control-btn">
                     <SkipBack size={40} fill="currentColor" />
                 </button>
                 <button onClick={togglePlay} className="control-btn play-btn">
                     {isPlaying ? <Pause size={48} fill="currentColor" /> : <Play size={48} fill="currentColor" />}
                 </button>
-                <button onClick={handleSkipForward} className="control-btn">
+                <button onClick={skipForward} className="control-btn">
                     <SkipForward size={40} fill="currentColor" />
                 </button>
                 <button
