@@ -10,6 +10,9 @@ const MarqueeText = ({ text, className = '', speed = 30, minLength = 20 }) => {
         const checkOverflow = () => {
             if (containerRef.current && textRef.current) {
                 const containerWidth = containerRef.current.offsetWidth;
+                // Skip if container isn't visible yet (display: none or zero width)
+                if (containerWidth === 0) return;
+
                 const textWidth = textRef.current.scrollWidth;
                 const isOverflowing = textWidth > containerWidth;
                 // Only animate if text is long enough AND overflows
@@ -24,9 +27,30 @@ const MarqueeText = ({ text, className = '', speed = 30, minLength = 20 }) => {
             }
         };
 
-        checkOverflow();
+        // Reset animation state when text changes
+        setShouldAnimate(false);
+
+        // Use ResizeObserver to detect when container becomes visible
+        // This handles the case where parent is initially display: none
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.contentRect.width > 0) {
+                    checkOverflow();
+                }
+            }
+        });
+
+        if (containerRef.current) {
+            resizeObserver.observe(containerRef.current);
+        }
+
+        // Also check on resize
         window.addEventListener('resize', checkOverflow);
-        return () => window.removeEventListener('resize', checkOverflow);
+
+        return () => {
+            resizeObserver.disconnect();
+            window.removeEventListener('resize', checkOverflow);
+        };
     }, [text, speed, minLength]);
 
     return (

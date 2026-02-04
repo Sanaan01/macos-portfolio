@@ -14,5 +14,13 @@
     "album": "Rainy Nights",
     "src": "/audio/Morning Dew - LoFi Waiter.mp3",
     "cover": "/audio/covers/morning_dew_lofi_waiter.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Abandon Ship",
+    "artist": "Simon Chylinski",
+    "album": "Subnautica (Original Game Soundtrack)",
+    "src": "/audio/Abandon Ship - Simon Chylinski.mp3",
+    "cover": "/audio/covers/abandon_ship_simon_chylinski.jpg"
   }
 ]
