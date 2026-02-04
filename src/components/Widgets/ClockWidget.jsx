@@ -7,69 +7,48 @@ const ClockWidget = ({ scale }) => {
     // Use the prop if passed (for mobile), otherwise use default
     const CLOCK_SCALE = scale || DEFAULT_SCALE;
 
-    // Base dimensions (will be multiplied by CLOCK_SCALE)
-    const d = {
-        boxSize: 168 * CLOCK_SCALE,
-        boxRadius: 25.6 * CLOCK_SCALE, // (1.6rem at 16px base)
-        faceSize: 145 * CLOCK_SCALE,
-        innerSize: 140 * CLOCK_SCALE,
-        markingOrigin: 70 * CLOCK_SCALE,
-        numberRadius: 50 * CLOCK_SCALE,
-        numberSize: 17 * CLOCK_SCALE,
-        pinSize: 9 * CLOCK_SCALE,
-        innerPinSize: 3 * CLOCK_SCALE,
-        // Hand Dimensions
-        hands: (() => {
-            const TAPER_CONFIG = {
-                width: 5.5 * CLOCK_SCALE,
-                thinWidth: 2.5 * CLOCK_SCALE,
-                thinStop: 11 * CLOCK_SCALE,
-                transitionLength: 3.5 * CLOCK_SCALE
-            };
-            return {
-                hour: {
-                    ...TAPER_CONFIG,
-                    length: 42 * CLOCK_SCALE,
-                    offset: -3 * CLOCK_SCALE,
-                },
-                minute: {
-                    ...TAPER_CONFIG,
-                    length: 71.5 * CLOCK_SCALE,
-                    offset: -3 * CLOCK_SCALE,
-                },
-                second: {
-                    width: 1.2 * CLOCK_SCALE,
-                    length: 85 * CLOCK_SCALE,
-                    offset: -12 * CLOCK_SCALE
-                }
-            };
-        })()
-    };
-
-    // Helper to generate tapered clip-path
+    // Helper to generate tapered clip-path (defined before useMemo that uses it)
     const getTaperedClip = (config) => {
         const { width: w, length: l, thinWidth: tw, thinStop: ts, transitionLength: tl } = config;
         if (!tw) return 'none';
 
-        // Horizontal percentages
         const x1 = ((w - tw) / 2 / w) * 100;
         const x2 = ((w + tw) / 2 / w) * 100;
+        const yS = (1 - ts / l) * 100;
+        const yE = (1 - (ts + tl) / l) * 100;
 
-        // Vertical percentages (100% is bottom, 0% is top)
-        const yS = (1 - ts / l) * 100;           // Transition starts
-        const yE = (1 - (ts + tl) / l) * 100;     // Transition ends (becomes full width)
-
-        return `polygon(
-            ${x1}% 100%, 
-            ${x2}% 100%, 
-            ${x2}% ${yS}%, 
-            100% ${yE}%, 
-            100% 0%, 
-            0% 0%, 
-            0% ${yE}%, 
-            ${x1}% ${yS}%
-        )`;
+        return `polygon(${x1}% 100%, ${x2}% 100%, ${x2}% ${yS}%, 100% ${yE}%, 100% 0%, 0% 0%, 0% ${yE}%, ${x1}% ${yS}%)`;
     };
+
+    // Memoize dimensions - only recalculates when scale changes
+    const d = useMemo(() => {
+        const TAPER_CONFIG = {
+            width: 5.5 * CLOCK_SCALE,
+            thinWidth: 2.5 * CLOCK_SCALE,
+            thinStop: 11 * CLOCK_SCALE,
+            transitionLength: 3.5 * CLOCK_SCALE
+        };
+        return {
+            boxSize: 168 * CLOCK_SCALE,
+            boxRadius: 25.6 * CLOCK_SCALE,
+            faceSize: 145 * CLOCK_SCALE,
+            innerSize: 140 * CLOCK_SCALE,
+            markingOrigin: 70 * CLOCK_SCALE,
+            numberRadius: 55 * CLOCK_SCALE,
+            numberSize: 17 * CLOCK_SCALE,
+            pinSize: 9 * CLOCK_SCALE,
+            innerPinSize: 3 * CLOCK_SCALE,
+            hands: {
+                hour: { ...TAPER_CONFIG, length: 42 * CLOCK_SCALE, offset: -3 * CLOCK_SCALE },
+                minute: { ...TAPER_CONFIG, length: 71.5 * CLOCK_SCALE, offset: -3 * CLOCK_SCALE },
+                second: { width: 1.2 * CLOCK_SCALE, length: 85 * CLOCK_SCALE, offset: -12 * CLOCK_SCALE }
+            }
+        };
+    }, [CLOCK_SCALE]);
+
+    // Memoize clip-paths - avoids recalculating polygon strings every frame
+    const hourClipPath = useMemo(() => getTaperedClip(d.hands.hour), [d.hands.hour]);
+    const minuteClipPath = useMemo(() => getTaperedClip(d.hands.minute), [d.hands.minute]);
 
     const hourRef = useRef(null);
     const minuteRef = useRef(null);
@@ -113,6 +92,7 @@ const ClockWidget = ({ scale }) => {
                         height: 5 * CLOCK_SCALE + 'px',
                         width: 1.5 * CLOCK_SCALE + 'px',
                         backgroundColor: isHour ? 'black' : 'rgba(0,0,0,0.25)',
+                        borderRadius: '999px',
                     }}
                 />
             );
@@ -179,7 +159,7 @@ const ClockWidget = ({ scale }) => {
                                     bottom: d.hands.hour.offset,
                                     width: d.hands.hour.width,
                                     height: d.hands.hour.length,
-                                    clipPath: getTaperedClip(d.hands.hour)
+                                    clipPath: hourClipPath
                                 }}
                             />
                         </div>
@@ -192,7 +172,7 @@ const ClockWidget = ({ scale }) => {
                                     bottom: d.hands.minute.offset,
                                     width: d.hands.minute.width,
                                     height: d.hands.minute.length,
-                                    clipPath: getTaperedClip(d.hands.minute)
+                                    clipPath: minuteClipPath
                                 }}
                             />
                         </div>

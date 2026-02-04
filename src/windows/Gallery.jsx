@@ -184,6 +184,7 @@ const Gallery = () => {
                     <img
                       src={thumbnail}
                       alt={name || `Gallery Image ${id}`}
+                      loading="lazy"
                       onError={(e) => {
                         e.target.src = img;
                       }}

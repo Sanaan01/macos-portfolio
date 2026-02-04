@@ -2,8 +2,8 @@ import gsap from "gsap"
 import { Draggable } from "gsap/Draggable"
 import { useEffect } from "react"
 
-import {Dock, Home, Navbar, MobileNavbar, Welcome, NotFound} from "#components"
-import {Contact, Finder, Gallery, Image, Resume, Safari, Terminal, Text, ControlCenter} from "#windows"
+import { Dock, Home, Navbar, MobileNavbar, Welcome, NotFound } from "#components"
+import { Contact, Finder, Gallery, Image, Resume, Safari, Terminal, Text, ControlCenter, MusicPlayer, MobileMusic, AboutOverview } from "#windows"
 import useThemeStore from "#store/theme.js"
 
 
@@ -52,16 +52,19 @@ const App = () => {
 
           <Terminal />
           <Safari />
-          <Resume/>
-          <Finder/>
-          <Text/>
-          <Image/>
-          <Contact/>
-          <Home/>
-          <Gallery/>
+          <Resume />
+          <Finder />
+          <Text />
+          <Image />
+          <Contact />
+          <Home />
+          <Gallery />
+          <MusicPlayer />
+          <MobileMusic />
+          <AboutOverview />
         </>
       )}
-      <ControlCenter/>
+      <ControlCenter />
     </main>
   )
 }

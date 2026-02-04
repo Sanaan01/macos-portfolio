@@ -20,6 +20,16 @@ const mobileApps = [
     id: "terminal",
     name: "Skills",
     icon: "terminalmobile.png",
+  },
+  {
+    id: "mobilemusic",
+    name: "Music",
+    icon: "applemusic.png",
+  },
+  {
+    id: "about",
+    name: "System",
+    icon: "settings.png",
   }
 ];
 
@@ -65,7 +75,7 @@ const Home = () => {
     <section id="home">
       {/* Desktop Home Icons */}
       <div className="max-sm:hidden">
-        <div className="widget absolute top-20 right-10 z-0">
+        <div className="widget absolute top-60 right-10 z-0">
           <ClockWidget />
         </div>
 
@@ -86,19 +96,19 @@ const Home = () => {
       {/* Mobile UI */}
       <div className="hidden max-sm:block w-full h-full relative">
         {/* --- MOBILE CLOCK POSITIONING --- */}
-        {/* Change 'top-[20px]' or 'left-3/4' to move it. Change 'scale={0.7}' to resize it. */}
-        <div className="absolute top-[30px] left-3/4 -translate-x-1/2 z-0">
+        <div className="absolute top-18 right-6 z-0 flex flex-col items-center gap-2">
           <ClockWidget scale={1.05} />
+          <p className="text-white text-xs font-medium text-center drop-shadow-md">Clock</p>
         </div>
 
-        <div className="grid grid-cols-4 mt-14 gap-6 p-6 justify-items-center items-start relative z-10 pointer-events-none">
+        <div className="absolute top-18 left-6 grid grid-cols-2 gap-y-2 gap-x-6 z-10 pointer-events-none w-fit">
           {mobileApps.map((app) => (
             <div
               key={app.id}
               className="flex flex-col items-center gap-2 cursor-pointer active:opacity-70 transition-opacity pointer-events-auto"
               onClick={() => openWindow(app.id)}
             >
-              <img src={`/images/${app.icon}`} alt={app.name} className="size-22 object-contain drop-shadow-lg" />
+              <img src={`/images/${app.icon}`} alt={app.name} className="size-19 object-contain drop-shadow-lg" />
               <p className="text-white text-xs font-medium text-center drop-shadow-md">{app.name}</p>
             </div>
           ))}

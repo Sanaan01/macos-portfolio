@@ -1,0 +1,240 @@
+import { useState, useEffect } from "react";
+import WindowWrapper from "#hoc/WindowWrapper.jsx";
+import { WindowControls } from "#components/index.js";
+import { gallery as staticGallery } from "#constants/index.js";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
+// Build-time constants (injected by Vite)
+const GIT_COMMIT = typeof __GIT_COMMIT__ !== 'undefined' ? __GIT_COMMIT__ : 'dev';
+const GIT_BRANCH = typeof __GIT_BRANCH__ !== 'undefined' ? __GIT_BRANCH__ : 'unknown';
+const APP_VERSION = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.0';
+const BUILD_TIME = typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : new Date().toISOString();
+
+// Custom hook for shared About data and effects
+const useAboutData = () => {
+    const [loadedAssets, setLoadedAssets] = useState("—");
+    const [galleryCount, setGalleryCount] = useState(staticGallery.length);
+    const [deviceInfo, setDeviceInfo] = useState({ platform: "—", browser: "—" });
+    const [viewport, setViewport] = useState({ width: 0, height: 0, dpr: 1 });
+    const [uptime, setUptime] = useState("—");
+
+    // Base portfolio size (JS, CSS, static images, fonts, etc.) - approximately 3MB
+    const BASE_PORTFOLIO_SIZE_MB = 3;
+
+    // Calculate loaded assets: base portfolio + gallery images from API
+    useEffect(() => {
+        const calculateAssets = async () => {
+            try {
+                let totalSizeMB = BASE_PORTFOLIO_SIZE_MB;
+
+                // Get actual gallery size from API
+                const res = await fetch('/api/gallery.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    // Use actual totalSize from API if available (in bytes)
+                    if (data.totalSize) {
+                        totalSizeMB += data.totalSize / (1024 * 1024);
+                    } else {
+                        // Fallback: estimate ~500KB per image
+                        const images = data.images || [];
+                        totalSizeMB += (images.length * 0.5);
+                    }
+                }
+
+                // Add static gallery images (~300KB each)
+                totalSizeMB += (staticGallery.length * 0.3);
+
+                setLoadedAssets(`${totalSizeMB.toFixed(1)} MB`);
+            } catch {
+                setLoadedAssets(`${BASE_PORTFOLIO_SIZE_MB} MB`);
+            }
+        };
+        calculateAssets();
+    }, []);
+
+    // Fetch gallery count from API
+    useEffect(() => {
+        const fetchGalleryCount = async () => {
+            try {
+                const res = await fetch('/api/gallery.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    const r2Count = data.images?.length || 0;
+                    setGalleryCount(r2Count + staticGallery.length);
+                }
+            } catch { }
+        };
+        fetchGalleryCount();
+    }, []);
+
+    // Get device/browser info
+    useEffect(() => {
+        const getDeviceInfo = () => {
+            let platform = "Unknown";
+            let browser = "Unknown";
+
+            if (navigator.userAgentData) {
+                platform = navigator.userAgentData.platform || "Unknown";
+                const brands = navigator.userAgentData.brands || [];
+                const mainBrand = brands.find(b =>
+                    !b.brand.includes("Not") && !b.brand.includes("Chromium")
+                ) || brands[0];
+                browser = mainBrand?.brand || "Chrome";
+            } else {
+                const ua = navigator.userAgent;
+                if (ua.includes("Win")) platform = "Windows";
+                else if (ua.includes("Mac")) platform = "macOS";
+                else if (ua.includes("Linux")) platform = "Linux";
+                else if (ua.includes("Android")) platform = "Android";
+                else if (ua.includes("iPhone") || ua.includes("iPad")) platform = "iOS";
+
+                if (ua.includes("Firefox")) browser = "Firefox";
+                else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
+                else if (ua.includes("Edge")) browser = "Edge";
+                else if (ua.includes("Chrome")) browser = "Chrome";
+            }
+
+            setDeviceInfo({ platform, browser });
+        };
+        getDeviceInfo();
+    }, []);
+
+    // Get viewport info
+    useEffect(() => {
+        const updateViewport = () => {
+            setViewport({
+                width: window.innerWidth,
+                height: window.innerHeight,
+                dpr: window.devicePixelRatio || 1,
+            });
+        };
+        updateViewport();
+        window.addEventListener("resize", updateViewport);
+        return () => window.removeEventListener("resize", updateViewport);
+    }, []);
+
+    // Calculate uptime (time since deployment/build)
+    useEffect(() => {
+        const updateUptime = () => {
+            const now = dayjs();
+            const deployed = dayjs(BUILD_TIME);
+            const diffMs = now.diff(deployed);
+
+            const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+            let uptimeStr = '';
+            if (days > 0) uptimeStr += `${days}d `;
+            if (hours > 0 || days > 0) uptimeStr += `${hours}h `;
+            uptimeStr += `${minutes}m`;
+
+            setUptime(uptimeStr.trim());
+        };
+        updateUptime();
+        const interval = setInterval(updateUptime, 60000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const TOTAL_LOC = "20,542";
+
+    return { loadedAssets, galleryCount, deviceInfo, viewport, uptime, TOTAL_LOC };
+};
+
+const AboutOverview = () => {
+    const { loadedAssets, galleryCount, deviceInfo, viewport, uptime, TOTAL_LOC } = useAboutData();
+
+    return (
+        <>
+            <div id="window-header">
+                <WindowControls target="about" disableMaximize />
+                <h2>About</h2>
+                <div className="w-16" />
+            </div>
+
+            <div className="about-content">
+                {/* Mobile Profile Header - iOS Settings style */}
+                <div className="about-profile-header hidden max-sm:flex">
+                    <img
+                        src="/images/sanaan.JPG"
+                        alt="Profile"
+                        className="about-profile-img-mobile"
+                    />
+                    <div className="about-profile-header-text">
+                        <h1 className="about-header-title">Sanaan's Portfolio</h1>
+                        <p className="about-header-subtitle">Photos, Projects and more!</p>
+                    </div>
+                </div>
+
+                {/* Desktop: Profile Image */}
+                <div className="about-image max-sm:hidden">
+                    <img
+                        src="/images/sanaan.JPG"
+                        alt="Profile"
+                        className="about-profile-img"
+                    />
+                </div>
+
+                {/* Desktop: Info Panel / Mobile: Details */}
+                <div className="about-info">
+                    <h1 className="about-title max-sm:hidden">Sanaan's Portfolio</h1>
+                    <p className="about-version max-sm:hidden">Version {APP_VERSION}</p>
+
+                    <div className="about-details">
+                        <div className="about-row">
+                            <span className="about-label">Deployed</span>
+                            <span className="about-value">{uptime}</span>
+                        </div>
+                        <div className="about-row">
+                            <span className="about-label">Commit</span>
+                            <span className="about-value max-sm:hidden">{GIT_COMMIT} ({GIT_BRANCH})</span>
+                            <span className="about-value hidden max-sm:inline">{GIT_COMMIT}</span>
+                        </div>
+                        <div className="about-row">
+                            <span className="about-label">Built</span>
+                            <span className="about-value">{dayjs(BUILD_TIME).format("MMM D, YYYY")}</span>
+                        </div>
+                        <div className="about-row">
+                            <span className="about-label">Loaded Assets</span>
+                            <span className="about-value">{loadedAssets}</span>
+                        </div>
+                        <div className="about-row">
+                            <span className="about-label">Platform</span>
+                            <span className="about-value max-sm:hidden">{deviceInfo.platform} • {deviceInfo.browser}</span>
+                            <span className="about-value hidden max-sm:inline">{deviceInfo.platform}</span>
+                        </div>
+                        <div className="about-row max-sm:hidden">
+                            <span className="about-label">Browser</span>
+                            <span className="about-value">{deviceInfo.browser}</span>
+                        </div>
+                        <div className="about-row hidden max-sm:flex">
+                            <span className="about-label">Browser</span>
+                            <span className="about-value">{deviceInfo.browser}</span>
+                        </div>
+                        <div className="about-row">
+                            <span className="about-label">Gallery</span>
+                            <span className="about-value max-sm:hidden">{galleryCount} photos</span>
+                            <span className="about-value hidden max-sm:inline">{galleryCount}</span>
+                        </div>
+                        <div className="about-row">
+                            <span className="about-label">Total Code</span>
+                            <span className="about-value max-sm:hidden">{TOTAL_LOC} lines</span>
+                            <span className="about-value hidden max-sm:inline">{TOTAL_LOC} lines</span>
+                        </div>
+                    </div>
+
+                    <p className="about-copyright">
+                        © {new Date().getFullYear()} sanaan.dev — All rights reserved
+                    </p>
+                </div>
+            </div>
+        </>
+    );
+};
+
+const AboutOverviewWindow = WindowWrapper(AboutOverview, "about");
+
+export default AboutOverviewWindow;

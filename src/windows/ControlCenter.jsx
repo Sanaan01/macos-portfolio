@@ -53,7 +53,7 @@ const ControlCenter = () => {
     <div
       ref={containerRef}
       className="fixed w-[140px] bg-white/70 dark:bg-[#1e1e1e]/70 backdrop-blur-2xl rounded-2xl shadow-2xl overflow-hidden select-none border border-white/20 dark:border-white/10"
-      style={{ 
+      style={{
         zIndex: 3100,
         top: data?.bottom ? `${data.bottom + 8}px` : "48px",
         left: data?.centerX ? `${data.centerX - 70}px` : undefined,
@@ -94,7 +94,7 @@ const ControlCenter = () => {
           </button>
         ))}
       </div>
-      
+
       {/* Invisible overlay to close when clicking outside if needed, 
           but usually Control Center stays until toggled or specifically closed.
           For now, just the window as requested. */}

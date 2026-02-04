@@ -10,6 +10,14 @@ const WindowWrapper = (Component, windowKey) => {
     const ref = useRef(null);
     const isFirstMount = useRef(true);
     const posBeforeFullscreen = useRef({ top: 0, left: 0, width: 0, height: 0, transform: "none" });
+    const [hasBeenOpened, setHasBeenOpened] = useState(false);
+
+    // Track if window has ever been opened (for true lazy loading)
+    useEffect(() => {
+      if (isOpen && !hasBeenOpened) {
+        setHasBeenOpened(true);
+      }
+    }, [isOpen, hasBeenOpened]);
 
     useGSAP(() => {
       const el = ref.current;
@@ -91,13 +99,32 @@ const WindowWrapper = (Component, windowKey) => {
     }, [isFullscreen]);
 
     const [isMobile, setIsMobile] = useState(false);
+    const wasMobile = useRef(window.innerWidth < 640);
+    const { closeWindow } = useWindowStore();
 
     useEffect(() => {
-      const handleResize = () => setIsMobile(window.innerWidth < 640);
+      const handleResize = () => {
+        const nowMobile = window.innerWidth < 640;
+
+        // If transitioning from desktop to mobile, close this window immediately
+        // and reset position so mobile CSS takes effect
+        if (!wasMobile.current && nowMobile && isOpen) {
+          const el = ref.current;
+          if (el) {
+            el.style.display = 'none';
+            // Clear GSAP inline styles so CSS mobile positioning works
+            gsap.set(el, { clearProps: "transform,top,left,x,y" });
+          }
+          closeWindow(windowKey);
+        }
+
+        wasMobile.current = nowMobile;
+        setIsMobile(nowMobile);
+      };
       handleResize();
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [isOpen, closeWindow]);
 
     useGSAP(() => {
       const el = ref.current;
@@ -124,7 +151,7 @@ const WindowWrapper = (Component, windowKey) => {
       ref={ref}
       style={{ zIndex }}
       className="absolute">
-      <Component {...props} />
+      {hasBeenOpened && <Component {...props} />}
     </section>
   }
 

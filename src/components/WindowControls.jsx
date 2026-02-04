@@ -3,7 +3,7 @@ import { ChevronLeft } from "lucide-react";
 
 const BACK_BUTTON_CLASS = "hidden max-sm:flex items-center gap-1 text-blue-500 font-medium focus:outline-none";
 
-const WindowControls = ({ target }) => {
+const WindowControls = ({ target, disableMaximize = false }) => {
     const { closeWindow, toggleFullscreen } = useWindowStore();
 
     const handleClose = () => {
@@ -20,7 +20,11 @@ const WindowControls = ({ target }) => {
             <div id="window-controls" className="max-sm:hidden">
                 <div className="close" onClick={handleClose} />
                 <div className="minimize" onClick={handleClose} />
-                <div className="maximize" onClick={() => toggleFullscreen(target)} />
+                <div
+                    className={`maximize ${disableMaximize ? 'disabled' : ''}`}
+                    onClick={disableMaximize ? undefined : () => toggleFullscreen(target)}
+                    style={disableMaximize ? { backgroundColor: '#ccc', cursor: 'default' } : undefined}
+                />
             </div>
 
             {/* Mobile Back Button */}
