@@ -157,7 +157,7 @@ const AboutOverview = () => {
                 {/* Left: Profile Image */}
                 <div className="about-image">
                     <img
-                        src="/images/sanaanfull.JPG"
+                        src="/images/sanaan.JPG"
                         alt="Profile"
                         className="about-profile-img"
                     />

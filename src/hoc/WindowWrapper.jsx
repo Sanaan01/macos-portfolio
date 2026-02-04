@@ -10,6 +10,14 @@ const WindowWrapper = (Component, windowKey) => {
     const ref = useRef(null);
     const isFirstMount = useRef(true);
     const posBeforeFullscreen = useRef({ top: 0, left: 0, width: 0, height: 0, transform: "none" });
+    const [hasBeenOpened, setHasBeenOpened] = useState(false);
+
+    // Track if window has ever been opened (for true lazy loading)
+    useEffect(() => {
+      if (isOpen && !hasBeenOpened) {
+        setHasBeenOpened(true);
+      }
+    }, [isOpen, hasBeenOpened]);
 
     useGSAP(() => {
       const el = ref.current;
@@ -140,7 +148,7 @@ const WindowWrapper = (Component, windowKey) => {
       ref={ref}
       style={{ zIndex }}
       className="absolute">
-      <Component {...props} />
+      {hasBeenOpened && <Component {...props} />}
     </section>
   }
 

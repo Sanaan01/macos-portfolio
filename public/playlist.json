@@ -5,7 +5,7 @@
     "artist": "Shoyo",
     "album": "ghibli lofi",
     "src": "/audio/My Neighbor Totoro_ - Shoyo.mp3",
-    "cover": "/audio/covers/my_neighbor_totoro_shoyo.jpg"
+    "cover": "/audio/covers/my_neighbor_totoro_shoyo.webp"
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "artist": "LoFi Waiter",
     "album": "Rainy Nights",
     "src": "/audio/Morning Dew - LoFi Waiter.mp3",
-    "cover": "/audio/covers/morning_dew_lofi_waiter.jpg"
+    "cover": "/audio/covers/morning_dew_lofi_waiter.webp"
   },
   {
     "id": 3,
@@ -21,6 +21,6 @@
     "artist": "Simon Chylinski",
     "album": "Subnautica (Original Game Soundtrack)",
     "src": "/audio/Abandon Ship - Simon Chylinski.mp3",
-    "cover": "/audio/covers/abandon_ship_simon_chylinski.jpg"
+    "cover": "/audio/covers/abandon_ship_simon_chylinski.webp"
   }
 ]

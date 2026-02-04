@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import jsmediatags from 'jsmediatags';
+import sharp from 'sharp';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,20 +29,20 @@ function extractMetadata(filePath) {
 }
 
 /**
- * Save cover art from ID3 tags to a file
+ * Save cover art from ID3 tags to a WebP file with 70% quality compression
  */
-function saveCoverArt(picture, outputPath) {
+async function saveCoverArt(picture, outputPath) {
     if (!picture) return null;
 
-    const { data, format } = picture;
-    // Convert format to file extension
-    let ext = 'jpg';
-    if (format && format.includes('png')) ext = 'png';
-    if (format && format.includes('webp')) ext = 'webp';
-
-    const finalPath = outputPath.replace(/\.[^.]+$/, `.${ext}`);
+    const { data } = picture;
     const buffer = Buffer.from(data);
-    fs.writeFileSync(finalPath, buffer);
+
+    // Always save as WebP with 70% quality for optimal compression
+    const finalPath = outputPath.replace(/\.[^.]+$/, '.webp');
+
+    await sharp(buffer)
+        .webp({ quality: 70 })
+        .toFile(finalPath);
 
     return path.basename(finalPath);
 }
@@ -143,7 +144,7 @@ async function generatePlaylist() {
             // Extract and save cover art
             if (tags.picture) {
                 const coverPath = path.join(coversDir, `${slug}.jpg`);
-                coverFile = saveCoverArt(tags.picture, coverPath);
+                coverFile = await saveCoverArt(tags.picture, coverPath);
                 if (coverFile) {
                     console.log(`    ✓ Extracted cover art: ${coverFile}`);
                 }
