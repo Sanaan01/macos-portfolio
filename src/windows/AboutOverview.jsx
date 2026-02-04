@@ -21,24 +21,33 @@ const useAboutData = () => {
     const [viewport, setViewport] = useState({ width: 0, height: 0, dpr: 1 });
     const [uptime, setUptime] = useState("—");
 
-    // Calculate loaded assets size
+    // Base portfolio size (JS, CSS, images, fonts, etc.) - approximately 3MB
+    const BASE_PORTFOLIO_SIZE_MB = 3;
+
+    // Calculate loaded assets: base portfolio + gallery images
     useEffect(() => {
-        const calculateAssets = () => {
+        const calculateAssets = async () => {
             try {
-                const resources = performance.getEntriesByType("resource");
-                let totalSize = 0;
-                for (const resource of resources) {
-                    const size = resource.transferSize || resource.encodedBodySize || 0;
-                    totalSize += size;
+                let totalSizeMB = BASE_PORTFOLIO_SIZE_MB;
+
+                // Add gallery images size from API
+                const res = await fetch('/api/gallery.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    const images = data.images || [];
+                    // Estimate ~500KB per gallery image on average
+                    totalSizeMB += (images.length * 0.5);
                 }
-                const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
-                setLoadedAssets(`${sizeMB} MB`);
+
+                // Add static gallery images (~300KB each)
+                totalSizeMB += (staticGallery.length * 0.3);
+
+                setLoadedAssets(`${totalSizeMB.toFixed(1)} MB`);
             } catch {
-                setLoadedAssets("—");
+                setLoadedAssets(`${BASE_PORTFOLIO_SIZE_MB} MB`);
             }
         };
-        const timer = setTimeout(calculateAssets, 500);
-        return () => clearTimeout(timer);
+        calculateAssets();
     }, []);
 
     // Fetch gallery count from API
@@ -186,7 +195,7 @@ const AboutOverview = () => {
                     </div>
 
                     <p className="about-copyright">
-                        © 2026 sanaan.dev — All rights reserved
+                        © {new Date().getFullYear()} sanaan.dev — All rights reserved
                     </p>
                 </div>
             </div>
@@ -265,7 +274,7 @@ const MobileAbout = () => {
 
                 {/* Copyright */}
                 <p className="mobile-about-copyright">
-                    © 2026 sanaan.dev — All rights reserved
+                    © {new Date().getFullYear()} sanaan.dev — All rights reserved
                 </p>
             </div>
         </>
