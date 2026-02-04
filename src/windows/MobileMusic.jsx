@@ -1,96 +1,66 @@
 import WindowWrapper from "#hoc/WindowWrapper.jsx";
 import { WindowControls } from "#components/index.js";
-import { useRef, useState, useEffect } from "react";
-import { SkipBack, Play, Pause, SkipForward } from "lucide-react";
+import useWindowStore from "#store/window.js";
+import useAudioStore from "#store/audio.js";
+import { useRef, useEffect } from "react";
+import { SkipBack, Play, Pause, SkipForward, Shuffle, Repeat, Repeat1 } from "lucide-react";
 
 const MobileMusic = () => {
-    const audioRef = useRef(null);
-    const isSeeking = useRef(false);
-    const wasPlayingBeforeSeek = useRef(false);
+    const { closeWindow } = useWindowStore();
+    const localSeekTime = useRef(0);
 
-    const [playlist, setPlaylist] = useState([]);
-    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [seekTime, setSeekTime] = useState(0);
+    // Get state and actions from shared audio store
+    const {
+        playlist,
+        currentTrackIndex,
+        isPlaying,
+        currentTime,
+        duration,
+        shuffleEnabled,
+        repeatMode,
+        getCurrentTrack,
+        setPlaylist,
+        togglePlay,
+        nextTrack,
+        prevTrack,
+        startSeek,
+        endSeek,
+        seek,
+        loadTrack,
+        toggleShuffle,
+        cycleRepeatMode,
+    } = useAudioStore();
 
-    const currentTrack = playlist[currentTrackIndex] || { title: '', artist: '', album: '', src: '', cover: '' };
+    const currentTrack = getCurrentTrack();
 
-    // Fetch playlist on mount
+    // Fetch playlist on mount (if not already loaded)
     useEffect(() => {
-        fetch('/playlist.json')
-            .then(res => res.json())
-            .then(data => setPlaylist(data))
-            .catch(err => console.error('Failed to load playlist:', err));
-    }, []);
+        if (playlist.length === 0) {
+            fetch('/playlist.json')
+                .then(res => res.json())
+                .then(data => {
+                    setPlaylist(data); // loadTrack is now called internally
+                })
+                .catch(err => console.error('Failed to load playlist:', err));
+        }
+    }, [playlist.length, setPlaylist]);
 
-    // Audio event listeners
+    // Auto-close mobile music when resizing to desktop (no animation)
     useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        const handleTimeUpdate = () => {
-            if (!isSeeking.current) {
-                setCurrentTime(audio.currentTime);
+        const handleResize = () => {
+            if (window.innerWidth >= 640) {
+                // Close immediately without animation by setting display none directly
+                const el = document.getElementById('mobilemusic');
+                if (el) {
+                    el.style.display = 'none';
+                }
+                closeWindow('mobilemusic');
             }
         };
-        const handleLoadedMetadata = () => setDuration(audio.duration);
-        const handleEnded = () => {
-            // Auto-advance to next track when current ends
-            setCurrentTrackIndex(prev => {
-                if (prev < playlist.length - 1) {
-                    return prev + 1;
-                }
-                // Last track ended, stop playing
-                setIsPlaying(false);
-                return prev;
-            });
-            setCurrentTime(0);
-        };
 
-        audio.addEventListener("timeupdate", handleTimeUpdate);
-        audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-        audio.addEventListener("ended", handleEnded);
-
-        return () => {
-            audio.removeEventListener("timeupdate", handleTimeUpdate);
-            audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-            audio.removeEventListener("ended", handleEnded);
-        };
-    }, [playlist.length]);
-
-    // Effect to load and play audio when track changes
-    useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio || playlist.length === 0) return;
-
-        // Load the new source
-        audio.load();
-        setDuration(0);
-        setCurrentTime(0);
-
-        // If we should be playing, start playback
-        if (isPlaying) {
-            audio.play().catch(err => {
-                console.error('Playback failed:', err);
-                setIsPlaying(false);
-            });
-        }
-    }, [currentTrackIndex, playlist]);
-
-
-    const togglePlay = () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        if (isPlaying) {
-            audio.pause();
-        } else {
-            audio.play();
-        }
-        setIsPlaying(!isPlaying);
-    };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [closeWindow]);
 
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
@@ -99,58 +69,35 @@ const MobileMusic = () => {
     };
 
     const handleSeekStart = () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-        isSeeking.current = true;
-        wasPlayingBeforeSeek.current = isPlaying;
-        if (isPlaying) {
-            audio.pause();
-        }
+        startSeek();
     };
 
     const handleProgressChange = (e) => {
         const newTime = (e.target.value / 100) * duration;
-        setSeekTime(newTime);
-        setCurrentTime(newTime);
+        localSeekTime.current = newTime;
+        // Update visual immediately
+        useAudioStore.setState({ currentTime: newTime });
     };
 
     const handleSeekEnd = () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-        audio.currentTime = seekTime;
-        isSeeking.current = false;
-        if (wasPlayingBeforeSeek.current) {
-            audio.play();
-        }
+        endSeek(localSeekTime.current);
     };
 
-    const playTrack = (index) => {
-        const audio = audioRef.current;
-        if (!audio) return;
-        setCurrentTrackIndex(index);
-        setCurrentTime(0);
-        audio.load();
-        audio.play();
-        setIsPlaying(true);
-    };
-
+    // Skip back: if < 5 seconds and not first track, go to previous; otherwise restart
     const handleSkipBack = () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
         if (currentTime < 5 && currentTrackIndex > 0) {
-            playTrack(currentTrackIndex - 1);
+            prevTrack();
         } else {
-            audio.currentTime = 0;
-            setCurrentTime(0);
+            seek(0);
         }
     };
 
+    // Skip forward: go to next track or loop to first
     const handleSkipForward = () => {
         if (currentTrackIndex < playlist.length - 1) {
-            playTrack(currentTrackIndex + 1);
+            nextTrack();
         } else {
-            playTrack(0);
+            useAudioStore.getState().setTrack(0);
         }
     };
 
@@ -181,8 +128,6 @@ const MobileMusic = () => {
             </div>
 
             <div className="mobile-music-content relative z-10">
-                <audio ref={audioRef} src={currentTrack.src} />
-
                 {/* Album Art */}
                 <div className="album-art-container">
                     <img
@@ -197,42 +142,56 @@ const MobileMusic = () => {
                     <h3 className="track-title">{currentTrack.title}</h3>
                     <p className="track-artist">{currentTrack.artist}</p>
                 </div>
+            </div>
 
-                {/* Progress Bar */}
-                <div className="progress-container">
-                    <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={progressPercent}
-                        onChange={handleProgressChange}
-                        onMouseDown={handleSeekStart}
-                        onMouseUp={handleSeekEnd}
-                        onTouchStart={handleSeekStart}
-                        onTouchEnd={handleSeekEnd}
-                        className="mobile-music-slider"
-                        style={{
-                            "--progress": `${progressPercent}%`,
-                        }}
-                    />
-                    <div className="time-display">
-                        <span>{formatTime(currentTime)}</span>
-                        <span>-{formatTime(duration - currentTime)}</span>
-                    </div>
+            {/* Progress Bar - Fixed at bottom */}
+            <div className="progress-container z-10">
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={progressPercent}
+                    onChange={handleProgressChange}
+                    onMouseDown={handleSeekStart}
+                    onMouseUp={handleSeekEnd}
+                    onTouchStart={handleSeekStart}
+                    onTouchEnd={handleSeekEnd}
+                    className="mobile-music-slider"
+                    style={{
+                        "--progress": `${progressPercent}%`,
+                    }}
+                />
+                <div className="time-display">
+                    <span>{formatTime(currentTime)}</span>
+                    <span>-{formatTime(duration - currentTime)}</span>
                 </div>
+            </div>
 
-                {/* Controls */}
-                <div className="controls">
-                    <button onClick={handleSkipBack} className="control-btn">
-                        <SkipBack size={40} fill="currentColor" />
-                    </button>
-                    <button onClick={togglePlay} className="control-btn play-btn">
-                        {isPlaying ? <Pause size={48} fill="currentColor" /> : <Play size={48} fill="currentColor" />}
-                    </button>
-                    <button onClick={handleSkipForward} className="control-btn">
-                        <SkipForward size={40} fill="currentColor" />
-                    </button>
-                </div>
+            {/* Controls - Fixed at bottom */}
+            <div className="controls z-10">
+                <button
+                    onClick={toggleShuffle}
+                    className={`control-btn ${shuffleEnabled ? 'text-white' : 'text-white/40'
+                        }`}
+                >
+                    <Shuffle size={24} />
+                </button>
+                <button onClick={handleSkipBack} className="control-btn">
+                    <SkipBack size={40} fill="currentColor" />
+                </button>
+                <button onClick={togglePlay} className="control-btn play-btn">
+                    {isPlaying ? <Pause size={48} fill="currentColor" /> : <Play size={48} fill="currentColor" />}
+                </button>
+                <button onClick={handleSkipForward} className="control-btn">
+                    <SkipForward size={40} fill="currentColor" />
+                </button>
+                <button
+                    onClick={cycleRepeatMode}
+                    className={`control-btn ${repeatMode !== 'off' ? 'text-white' : 'text-white/40'
+                        }`}
+                >
+                    {repeatMode === 'one' ? <Repeat1 size={24} /> : <Repeat size={24} />}
+                </button>
             </div>
         </>
     );

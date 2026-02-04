@@ -91,13 +91,29 @@ const WindowWrapper = (Component, windowKey) => {
     }, [isFullscreen]);
 
     const [isMobile, setIsMobile] = useState(false);
+    const wasMobile = useRef(window.innerWidth < 640);
+    const { closeWindow } = useWindowStore();
 
     useEffect(() => {
-      const handleResize = () => setIsMobile(window.innerWidth < 640);
+      const handleResize = () => {
+        const nowMobile = window.innerWidth < 640;
+
+        // If transitioning from desktop to mobile, close this window immediately
+        if (!wasMobile.current && nowMobile && isOpen) {
+          const el = ref.current;
+          if (el) {
+            el.style.display = 'none';
+          }
+          closeWindow(windowKey);
+        }
+
+        wasMobile.current = nowMobile;
+        setIsMobile(nowMobile);
+      };
       handleResize();
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [isOpen, closeWindow]);
 
     useGSAP(() => {
       const el = ref.current;

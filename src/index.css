@@ -620,6 +620,9 @@ body {
         @apply fixed inset-0 w-full h-full rounded-none top-0 left-0 overflow-hidden flex flex-col;
         background: linear-gradient(180deg, #6b4c5a 0%, #4a3545 30%, #3d2d3a 50%, #2d232d 100%);
 
+        /* Configurable bottom offset for controls - adjust this value to move them up/down */
+        --bottom-offset: 80px;
+
         #window-header {
             @apply bg-transparent border-none;
 
@@ -629,7 +632,9 @@ body {
         }
 
         .mobile-music-content {
-            @apply flex-1 flex flex-col items-center px-8 pb-8 pt-4;
+            @apply flex-1 flex flex-col items-center px-8 pt-4 relative;
+            padding-bottom: 140px;
+            /* Space for absolutely positioned controls */
         }
 
         .album-art-container {
@@ -654,7 +659,11 @@ body {
         }
 
         .progress-container {
-            @apply w-full mb-8;
+            @apply w-full px-8;
+            position: fixed !important;
+            bottom: calc(var(--bottom-offset) + 80px);
+            left: 0;
+            right: 0;
         }
 
         .mobile-music-slider {
@@ -702,7 +711,11 @@ body {
         }
 
         .controls {
-            @apply flex items-center justify-center gap-12;
+            @apply flex items-center justify-center gap-8;
+            position: fixed !important;
+            bottom: var(--bottom-offset);
+            left: 0;
+            right: 0;
         }
 
         .control-btn {
