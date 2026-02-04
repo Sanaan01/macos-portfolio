@@ -107,10 +107,13 @@ const WindowWrapper = (Component, windowKey) => {
         const nowMobile = window.innerWidth < 640;
 
         // If transitioning from desktop to mobile, close this window immediately
+        // and reset position so mobile CSS takes effect
         if (!wasMobile.current && nowMobile && isOpen) {
           const el = ref.current;
           if (el) {
             el.style.display = 'none';
+            // Clear GSAP inline styles so CSS mobile positioning works
+            gsap.set(el, { clearProps: "transform,top,left,x,y" });
           }
           closeWindow(windowKey);
         }
