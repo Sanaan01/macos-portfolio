@@ -9,6 +9,6 @@ import Gallery from "#windows/Gallery.jsx";
 import ControlCenter from "#windows/ControlCenter.jsx";
 import MusicPlayer from "#windows/MusicPlayer.jsx";
 import MobileMusic from "#windows/MobileMusic.jsx";
-import AboutOverview, { MobileAboutWindow } from "#windows/AboutOverview.jsx";
+import AboutOverview from "#windows/AboutOverview.jsx";
 
-export { Terminal, Safari, Resume, Finder, Text, Image, Contact, Gallery, ControlCenter, MusicPlayer, MobileMusic, AboutOverview, MobileAboutWindow };
+export { Terminal, Safari, Resume, Finder, Text, Image, Contact, Gallery, ControlCenter, MusicPlayer, MobileMusic, AboutOverview };
