@@ -18,6 +18,10 @@ const navLinks = [
 
 const navIcons = [
     {
+        id: 5,
+        img: "/icons/circle-play.svg",
+    },
+    {
         id: 1,
         img: "/icons/wifi.svg",
     },
@@ -472,6 +476,10 @@ const WINDOW_CONFIG = {
     txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
     controlcenter: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    music: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    mobilemusic: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    about: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+    mobileabout: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };
