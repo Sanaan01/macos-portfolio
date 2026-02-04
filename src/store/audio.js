@@ -30,8 +30,13 @@ const useAudioStore = create((set, get) => ({
     // Get the shared audio element
     getAudioElement: () => sharedAudio,
 
-    // Initialize playlist
-    setPlaylist: (playlist) => set({ playlist }),
+    // Initialize playlist and optionally load first track
+    setPlaylist: (playlist, autoLoadFirst = true) => {
+        set({ playlist });
+        if (autoLoadFirst && playlist.length > 0) {
+            get().loadTrack(false);
+        }
+    },
 
     // Sync audio state (called from components)
     syncState: () => {
@@ -140,7 +145,10 @@ const useAudioStore = create((set, get) => ({
         sharedAudio.currentTime = time;
         set({ isSeeking: false, currentTime: time });
         if (wasPlayingBeforeSeek) {
-            sharedAudio.play();
+            sharedAudio.play().catch(err => {
+                console.error('Playback failed after seek:', err);
+                set({ isPlaying: false });
+            });
             set({ isPlaying: true });
         }
     },
@@ -208,7 +216,10 @@ if (sharedAudio) {
         // Repeat-one mode: loop current track
         if (repeatMode === 'one') {
             sharedAudio.currentTime = 0;
-            sharedAudio.play();
+            sharedAudio.play().catch(err => {
+                console.error('Repeat-one playback failed:', err);
+                useAudioStore.setState({ isPlaying: false });
+            });
             return;
         }
 

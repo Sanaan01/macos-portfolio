@@ -39,12 +39,11 @@ const MobileMusic = () => {
             fetch('/playlist.json')
                 .then(res => res.json())
                 .then(data => {
-                    setPlaylist(data);
-                    setTimeout(() => loadTrack(false), 100);
+                    setPlaylist(data); // loadTrack is now called internally
                 })
                 .catch(err => console.error('Failed to load playlist:', err));
         }
-    }, []);
+    }, [playlist.length, setPlaylist]);
 
     // Auto-close mobile music when resizing to desktop (no animation)
     useEffect(() => {
@@ -76,6 +75,8 @@ const MobileMusic = () => {
     const handleProgressChange = (e) => {
         const newTime = (e.target.value / 100) * duration;
         localSeekTime.current = newTime;
+        // Update visual immediately
+        useAudioStore.setState({ currentTime: newTime });
     };
 
     const handleSeekEnd = () => {

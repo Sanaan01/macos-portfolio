@@ -41,12 +41,11 @@ const MusicPlayer = () => {
             fetch('/playlist.json')
                 .then(res => res.json())
                 .then(data => {
-                    setPlaylist(data);
-                    setTimeout(() => loadTrack(false), 100);
+                    setPlaylist(data); // loadTrack is now called internally
                 })
                 .catch(err => console.error('Failed to load playlist:', err));
         }
-    }, []);
+    }, [playlist.length, setPlaylist]);
 
     useGSAP(() => {
         const el = containerRef.current;
@@ -196,8 +195,8 @@ const MusicPlayer = () => {
                 <button
                     onClick={toggleShuffle}
                     className={`transition-all duration-150 hover:scale-110 active:scale-95 ${shuffleEnabled
-                            ? 'text-gray-800 dark:text-white'
-                            : 'text-gray-800/40 dark:text-white/40'
+                        ? 'text-gray-800 dark:text-white'
+                        : 'text-gray-800/40 dark:text-white/40'
                         }`}
                     title="Shuffle"
                 >
@@ -224,8 +223,8 @@ const MusicPlayer = () => {
                 <button
                     onClick={cycleRepeatMode}
                     className={`transition-all duration-150 hover:scale-110 active:scale-95 ${repeatMode !== 'off'
-                            ? 'text-gray-800 dark:text-white'
-                            : 'text-gray-800/40 dark:text-white/40'
+                        ? 'text-gray-800 dark:text-white'
+                        : 'text-gray-800/40 dark:text-white/40'
                         }`}
                     title={repeatMode === 'one' ? 'Repeat One' : repeatMode === 'all' ? 'Repeat All' : 'Repeat Off'}
                 >
