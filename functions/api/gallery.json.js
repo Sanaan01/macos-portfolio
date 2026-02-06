@@ -8,6 +8,7 @@
  * Required environment variables:
  * - R2_PUBLIC_URL: Public URL for R2 bucket (e.g., https://assets.sanaan.dev)
  * - R2_PATH_PREFIX: Optional folder prefix (e.g., macos-portfolio/)
+ * - R2_RESIZE_SOURCE_URL: Optional raw public URL for resizing (e.g., https://pub-xxxxx.r2.dev)
  */
 export async function onRequest(context) {
     const { env } = context;
@@ -32,6 +33,8 @@ export async function onRequest(context) {
         // List objects in bucket with optional prefix
         const prefix = env.R2_PATH_PREFIX || '';
         const listed = await env.MY_BUCKET.list({ prefix });
+        const publicBaseUrl = env.R2_PUBLIC_URL.replace(/\/+$/, '');
+        const resizeBaseUrl = (env.R2_RESIZE_SOURCE_URL || env.R2_PUBLIC_URL).replace(/\/+$/, '');
 
         // Filter for image files only
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif'];
@@ -60,9 +63,10 @@ export async function onRequest(context) {
                         : ['Library'];
 
                     // Construct URLs
-                    const fullUrl = `${env.R2_PUBLIC_URL}/${obj.key}`;
+                    const fullUrl = `${publicBaseUrl}/${obj.key}`;
+                    const resizeUrl = `${resizeBaseUrl}/${obj.key}`;
                     // Cloudflare Image Resizing URL for thumbnails (800px long side, maintain aspect ratio)
-                    const thumbnailUrl = `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85,format=auto/${fullUrl}`;
+                    const thumbnailUrl = `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85,format=auto/${resizeUrl}`;
 
                     // Extract filename from key
                     const name = obj.key.split('/').pop();
@@ -79,12 +83,13 @@ export async function onRequest(context) {
                 } catch (err) {
                     console.error(`Error getting metadata for ${obj.key}:`, err);
                     // Return with default categories if metadata fetch fails
-                    const fullUrl = `${env.R2_PUBLIC_URL}/${obj.key}`;
+                    const fullUrl = `${publicBaseUrl}/${obj.key}`;
+                    const resizeUrl = `${resizeBaseUrl}/${obj.key}`;
                     return {
                         id: obj.key,
                         name: obj.key.split('/').pop(),
                         img: fullUrl,
-                        thumbnail: `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85,format=auto/${fullUrl}`,
+                        thumbnail: `https://sanaan.dev/cdn-cgi/image/width=800,fit=scale-down,quality=85,format=auto/${resizeUrl}`,
                         size: obj.size || 0,
                         categories: ['Library'],
                     };
