@@ -66,6 +66,7 @@ const ImageFile = () => {
           alt={name}
           onLoad={handleImageLoad}
           decoding="async"
+          style={{ transform: 'translateZ(0)' }}
           className={`max-w-full max-h-full object-contain transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'
             }`}
         />

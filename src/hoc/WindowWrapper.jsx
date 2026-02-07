@@ -1,8 +1,20 @@
 import useWindowStore from "#store/window.js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
+
+// Throttle utility for resize performance
+const throttle = (func, limit) => {
+  let inThrottle;
+  return function (...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+};
 const WindowWrapper = (Component, windowKey) => {
   const Wrapped = (props) => {
     const { focusWindow, windows } = useWindowStore()
@@ -103,7 +115,7 @@ const WindowWrapper = (Component, windowKey) => {
     const { closeWindow } = useWindowStore();
 
     useEffect(() => {
-      const handleResize = () => {
+      const handleResize = throttle(() => {
         const nowMobile = window.innerWidth < 640;
 
         // If transitioning from desktop to mobile, close this window immediately
@@ -120,7 +132,7 @@ const WindowWrapper = (Component, windowKey) => {
 
         wasMobile.current = nowMobile;
         setIsMobile(nowMobile);
-      };
+      }, 16); // ~60fps
       handleResize();
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
